@@ -1,0 +1,7 @@
+DATA/raw/*
+OUTPUTS/plots/*
+OUTPUTS/csv/*
+OUTPUTS/hazard_timelines/*
+__pycache__/
+*.pyc
+.DS_Store
