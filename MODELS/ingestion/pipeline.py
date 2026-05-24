@@ -77,7 +77,7 @@ def run(force: bool = False) -> None:
 
     print("\nPipeline complete.")
     print(f"  Annual rows : {len(annual)} (1990-2011)")
-    print(f"  Obs rows    : {len(obs)} (44 observation points)")
+    print(f"  Obs rows    : {len(obs)} observation points")
     print(f"  Database    : {DB_PATH}")
     _print_coverage(annual)
 

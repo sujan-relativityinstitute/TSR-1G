@@ -12,6 +12,7 @@ Download from: https://acleddata.com/data-export-tool/ (select Tunisia, 1997-201
 """
 
 import os
+from typing import Optional
 import requests
 import pandas as pd
 from pathlib import Path
@@ -44,7 +45,7 @@ def fetch() -> pd.DataFrame:
     return _aggregate(raw)
 
 
-def _load_raw() -> pd.DataFrame | None:
+def _load_raw() -> Optional[pd.DataFrame]:
     if RAW_PATH.exists():
         print(f"  Loading ACLED from manual file: {RAW_PATH}")
         return pd.read_csv(RAW_PATH, low_memory=False)

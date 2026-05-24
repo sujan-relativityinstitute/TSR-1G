@@ -16,7 +16,7 @@ frequency data exists (FAO monthly FFPI, ACLED event counts).
 
 import numpy as np
 import pandas as pd
-from typing import Optional
+from typing import Dict, Optional, Tuple
 
 from .config import OBSERVATION_SCHEDULE, WEIGHTS, SOL_X2, SOL_X3, YEARS
 
@@ -48,7 +48,7 @@ def merge_raw(
 # 2. Interpolate gaps
 # -------------------------------------------------------------------------
 
-def interpolate_gaps(panel: pd.DataFrame, max_gap: int = 3) -> tuple[pd.DataFrame, pd.DataFrame]:
+def interpolate_gaps(panel: pd.DataFrame, max_gap: int = 3) -> Tuple[pd.DataFrame, pd.DataFrame]:
     """
     Linear interpolation for gaps up to max_gap years.
     Returns (interpolated_panel, interpolated_flag_df).
@@ -82,7 +82,7 @@ def minmax(series: pd.Series, invert: bool = False) -> pd.Series:
     return 1.0 - norm if invert else norm
 
 
-def wmean(df: pd.DataFrame, weights: dict[str, float]) -> pd.Series:
+def wmean(df: pd.DataFrame, weights: Dict[str, float]) -> pd.Series:
     """Weighted mean across named columns. Missing columns → 0 contribution."""
     total_w = 0.0
     result  = pd.Series(0.0, index=df.index)

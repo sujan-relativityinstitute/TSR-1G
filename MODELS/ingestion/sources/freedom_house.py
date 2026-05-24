@@ -13,6 +13,7 @@ Fallback: hard-coded annual series from published reports (1990-2011).
 Tunisia's historically reported scores are well-documented.
 """
 
+from typing import Optional
 import pandas as pd
 from ..config import RAW_DIR, COUNTRY_NAME, YEARS
 
@@ -55,7 +56,7 @@ def load() -> pd.DataFrame:
     return df
 
 
-def _parse_excel() -> pd.DataFrame | None:
+def _parse_excel() -> Optional[pd.DataFrame]:
     try:
         raw = pd.read_excel(RAW_PATH, sheet_name=None)
         # Sheet names vary by edition; try common patterns
