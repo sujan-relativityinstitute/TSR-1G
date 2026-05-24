@@ -259,6 +259,20 @@ def compute_tsr_variables(panel: pd.DataFrame, tt: pd.DataFrame, pi: pd.DataFram
     # vdem: not fetched; proxy from polity + freedom house composite
     vdem_n = (polity_n * 0.6 + cl_n * 0.4).clip(0, 1)
 
+    # MEPV: internal civil violence (0 throughout Tunisia → confirms low armed-conflict K)
+    # mepv_civviol scale 0-10; normalize. Adds to repression composite when non-zero.
+    if "mepv_civviol" in df.columns:
+        civviol_n = minmax(df["mepv_civviol"].fillna(0))
+    else:
+        civviol_n = pd.Series(0.0, index=df.index)
+
+    # MEPV: regional civil violence (neighbors — Algeria, Libya) → external Omega pressure
+    if "mepv_regciv" in df.columns:
+        regciv_n = minmax(df["mepv_regciv"].fillna(df["mepv_regciv"].median()
+                          if "mepv_regciv" in df.columns else 0))
+    else:
+        regciv_n = pd.Series(0.0, index=df.index)
+
     # Education + health spending normalized
     edu_n  = minmax(df["govt_education_spending_pct_gdp"].fillna(
         df["govt_education_spending_pct_gdp"].median()))
@@ -286,6 +300,8 @@ def compute_tsr_variables(panel: pd.DataFrame, tt: pd.DataFrame, pi: pd.DataFram
     norm["education"] = edu_n
     norm["health"]   = hlth_n
     norm["social"]   = soc_n
+    norm["civviol"]  = civviol_n
+    norm["regciv"]   = regciv_n
 
     out = pd.DataFrame(index=df.index)
 
@@ -307,8 +323,8 @@ def compute_tsr_variables(panel: pd.DataFrame, tt: pd.DataFrame, pi: pd.DataFram
     # Legitimacy: proxy from trust + civil liberties; will be updated from Arab Barometer
     out["L_legitimacy"] = (norm["trust"] * 0.5 + cl_n * 0.3 + cpi_n * 0.2).clip(0, 1)
 
-    # Repression
-    out["R_repression"] = (repression_n * 0.5 + (1 - pr_n) * 0.3 + (1 - cl_n) * 0.2).clip(0, 1)
+    # Repression (civviol adds MEPV armed-violence magnitude when non-zero)
+    out["R_repression"] = (repression_n * 0.45 + (1 - pr_n) * 0.30 + (1 - cl_n) * 0.15 + civviol_n * 0.10).clip(0, 1)
 
     # Political centralization (high autocracy = high P)
     out["P_centralization"] = polity_inv
@@ -329,8 +345,8 @@ def compute_tsr_variables(panel: pd.DataFrame, tt: pd.DataFrame, pi: pd.DataFram
     # Q: config-manifold coupling (high corruption + high tension = low Q)
     out["Q_coupling"] = ((1 - out["T_tension"]) * 0.5 + cpi_n * 0.3 + cl_n * 0.2).clip(0, 1)
 
-    # K: shock absorption capacity
-    out["K_absorption"] = (vdem_n * 0.4 + (1 - out["T_tension"]) * 0.3 + edu_n * 0.3).clip(0, 1)
+    # K: shock absorption capacity (regional civil violence from neighbors depletes K)
+    out["K_absorption"] = (vdem_n * 0.35 + (1 - out["T_tension"]) * 0.30 + edu_n * 0.25 + (1 - regciv_n) * 0.10).clip(0, 1)
 
     # D: dissipation capacity (press freedom, civil liberties, protest legitimacy)
     out["D_dissipation"] = (press_n * 0.4 + cl_n * 0.4 + protest_n * 0.2).clip(0, 1)
@@ -416,6 +432,7 @@ def compute_tsr_variables(panel: pd.DataFrame, tt: pd.DataFrame, pi: pd.DataFram
         "mobile_penetration_pct", "freedom_house_political_rights",
         "freedom_house_civil_liberties", "polity2", "corruption_cpi_score",
         "protest_events_count", "repression_events_count",
+        "mepv_civviol", "mepv_civwar", "mepv_regciv", "mepv_actotal",
     ]
     for col in raw_passthrough:
         if col in df.columns:
