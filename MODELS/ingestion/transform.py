@@ -408,6 +408,11 @@ def compute_tsr_variables(panel: pd.DataFrame, tt: pd.DataFrame, pi: pd.DataFram
         mdi_inputs[col] * w for col, w in W_mdi.items()
     ).clip(0, 1)
 
+    # dT_tension: signed annual rate of change — T viewed as a process, not just a state.
+    # Used by the phase classifier to detect rising-T dynamics (hidden fragility).
+    # NaN for the first row → 0 (no prior year to compare).
+    out["dT_tension"] = out["T_tension"].diff().fillna(0)
+
     # Regime phase classification
     out["regime_phase"] = out.apply(_classify_phase, axis=1)
 
@@ -436,14 +441,30 @@ def compute_tsr_variables(panel: pd.DataFrame, tt: pd.DataFrame, pi: pd.DataFram
 
 
 def _classify_phase(row: pd.Series) -> str:
-    c = row.get("C_cohesion", 0.5)
-    t = row.get("T_tension",  0.5)
-    mdi = row.get("MDI_star", 0.5)
+    """
+    Phase classifier — Section 34 definitions.
+
+    Uses T and its signed annual derivative (dT) as two views of the same construct.
+    dT captures the Metastable definition: "rising T — hidden fragility building."
+    No new variable is introduced; dT is the time gradient of T.
+
+    Known limitation: in years where repression suppresses protest events, T_tension
+    understates true underlying stress, so dT can be negative even as Omega accumulates
+    (e.g., Tunisia 2010). This will be corrected when Arab Barometer trust data
+    (Slot 5) provides a direct measure of perceived tension independent of event counts.
+    """
+    c   = row.get("C_cohesion", 0.5)
+    t   = row.get("T_tension",  0.5)
+    mdi = row.get("MDI_star",   0.5)
+    dt  = row.get("dT_tension", 0.0)
+
     if t > c and mdi > 0.75:
         return "Critical"
     if t > c and mdi > 0.50:
         return "Pre-Critical"
     if t > 0.4 or mdi > 0.45:
+        return "Metastable"
+    if dt > 0.05 and mdi > 0.03:
         return "Metastable"
     return "Stable"
 
