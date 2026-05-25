@@ -1855,6 +1855,119 @@ Turning the Crank operationalizes TSR-1G on real cases so that the theory produc
 
 **Entropy Mechanics:** Economic precarity indices and household debt burden (Θ estimation), Gini coefficients and top-decile income share (concentration gradient), government spending on public goods as share of GDP (E_m level), population growth rate and demographic projections (CS expansion), technology investment distribution between broad and concentrative applications (channeling assessment), institutional response latency measures (EH proximity), trade balance composition and resource extraction ratios (entropy export dependency), planning horizon surveys by income segment (temperature gradient behavioral signature).
 
+---
+
+## 38A. Input Architecture: Two-Type Input Discipline
+
+TSR-1G maintains a strict separation between what is observed and what is calculated. This separation is not procedural convenience. It is a structural requirement of the theory, analogous to the separation in General Relativity between the stress-energy tensor T_μν (what matter and energy are doing — the input) and the metric tensor g_μν (how spacetime curves in response — the output). The field equation connects them. TSR follows the same logic: inputs feed model equations; model equations produce the state vector and all derived quantities. Nothing that the model should calculate is permitted to enter as an input.
+
+### 38A.1 The Two Input Types
+
+**Type 1 — Structural Panel (background manifold)**
+
+The structural panel provides the slow-moving ambient conditions of the social manifold. These are empirically observable quantities that describe the distribution of economic mass, the political constraint architecture, the civil space available for expression and organization, and the conductivity of the information field. They are measured at regular intervals (annual, quarterly, or at available cadence) and constitute the background field within which events occur and propagate.
+
+The structural panel does not directly measure TSR variables. It provides the raw observables from which the model equations derive C, T, Q, K, D, L, Θ, S, the polydispersity indices, x2/x3 positions, T'(α), and all other state quantities. Proxy weights and composite formulas used to connect structural observables to TSR variables are implementation choices, not theory. They must be documented, must remain stable within a calibration version, and must not be adjusted post-hoc to match known outcomes.
+
+**Type 2 — Event Log (discrete perturbations)**
+
+The event log captures individual dated events that perturb the manifold. These are not slow background conditions. They are impulse inputs: specific occurrences with a date, an origin position in x2-x3 space, a content vector loading across x1/x2/x3, an interaction mode, a narrative charge, and an estimated symbolic criticality. They feed the same model equations as Type 1 inputs, but they enter as bounded perturbation vectors applied at specific times rather than as continuous background values.
+
+This distinction matters because the structural panel alone cannot explain why two structurally identical systems diverge after a single event. The event log provides the perturbation geometry. The structural panel provides the manifold curvature within which the perturbation propagates. Together, and only together, they produce the full trajectory.
+
+The Bouazizi self-immolation of December 17, 2010 is not a structural panel observation. It is a Type 2 input: a single dateable event with specific content vector loading (x1 — economic desperation; x2 — arbitrary state power; x3 — dignity and generational humiliation), high narrative charge q_n, multi-axis coupling across the Mass surface, and Mode 4 amplification interaction with accumulated stored Omega. It is not captured by annual protest counts or annual Gini coefficients. It belongs in the event log, coded as a TSR inforay, and must be incorporated as a Type 2 input if the model is to reproduce the trajectory.
+
+This applies equally to non-trigger events. The 2008 Gafsa mining basin protests are a Type 2 input with lower symbolic criticality and limited propagation reach due to the surface conditions at that time. Their absence from the collapse trajectory is as theoretically significant as Bouazizi's presence. Both must be in the event log. The model's job is to explain both outcomes from the same equations.
+
+### 38A.2 The Nine Generalized Structural Observables
+
+The structural panel for any TSR-1G case study must fill nine theoretical slots. The slot is theory. The data source filling the slot is measurement, and it varies by case, era, and data availability. The slot definition must not change to accommodate data availability. If a slot cannot be filled, the gap is documented and the model runs with reduced certainty in the affected variable cluster.
+
+**Slot 1 — x1 mass distribution**
+The shape of how material value is distributed across population segments. This is the primary input for computing the polydispersity indices PI_n, PI_w, PI_z and for estimating the mass of the Economic Singularity.
+Contemporary measurement: quintile or decile income or consumption shares, Gini coefficient.
+Historical measurement: tax records, tithe registers, landholding distributions, guild membership registers, cadastral surveys, inheritance records.
+What the model computes from this: PI_w, PI_z, PI_w/PI_n, PI_z/PI_w, Economic Singularity mass fraction.
+
+**Slot 2 — E' (realized material value level)**
+The mean or median level of currency-denominated economic output per member of the Mass. Sets the E' coordinate in x1 space.
+Contemporary measurement: GDP per capita, median household income, average real wage.
+Historical measurement: average caloric intake per capita, agricultural yield per household, trade volume per merchant unit, wage in grain-equivalent.
+What the model computes from this: x1 E' position, economic stress baseline.
+
+**Slot 3 — E" (frustrated positional value gradient)**
+The gap between potential E" (skills, education, social capital held) and realized E" (actual access to roles, licenses, connections, mobility). High E"/E' ratio indicates educated or capable populations excluded from the opportunity structure — a primary driver of T_tension.
+Contemporary measurement: youth unemployment rate divided by total unemployment rate; educated informal labor fraction; share of tertiary-educated population in non-graduate employment.
+Historical measurement: ratio of trained aspirants to available positions (clergy without benefices, journeymen without masterships, graduates without administrative posts), ratio of aspirant class to elite entry points.
+What the model computes from this: E" component of x1 position, contribution to T_tension, contribution to Θ in excluded segments.
+
+**Slot 4 — Material stress input**
+The cost of subsistence-level material reproduction relative to available income. Captures food and energy stress as a direct driver of Social Temperature Θ, particularly in the majority-weight population segments.
+Contemporary measurement: FAO Food Price Index, energy price index, consumer price inflation.
+Historical measurement: grain prices, bread prices, harvest failure records, famine chronicles, market price registers.
+What the model computes from this: contribution to Θ (Social Temperature), contribution to T_tension.
+
+**Slot 5 — Political constraint on the manifold**
+The degree to which the Configuration actively restricts Configuration Space — how tightly the governing structure constrains available political action, representation, and opposition. Sets the D_dom and O_ord input region.
+Contemporary measurement: Polity2 score, V-Dem liberal democracy index, Freedom House Political Rights score.
+Historical measurement: constitutional constraints on executive power, presence or absence of deliberative assemblies, degree of arbitrary arrest and trial, codified rights versus royal prerogative scope.
+What the model computes from this: contribution to CODA_D_dom, CODA_O_ord, P_centralization, L_legitimacy.
+
+**Slot 6 — Civil space constraint**
+The degree to which Autonomy and Connection are actively suppressed. Distinct from political constraint: this measures the freedom of everyday association, expression, organization, and information access available to the Mass.
+Contemporary measurement: Freedom House Civil Liberties score, press freedom index, RSF index.
+Historical measurement: censorship records, guild dissolution events, church-state competition over associational life, sedition law enforcement frequency.
+What the model computes from this: contribution to CODA_A_aut, CODA_C_conn, D_dissipation.
+
+**Slot 7 — Popular perturbation intensity**
+The rate or count of collective action events in which the population acts against or independent of the Configuration. This is the aggregate surface signal of T_tension expression.
+Contemporary measurement: ACLED protest and demonstration event counts, GDELT conflict events, SCAD social conflict data.
+Historical measurement: chronicle records of peasant revolts, urban riots, petition campaigns, strike records, millenarian movement counts, anti-tax resistance events.
+What the model computes from this: contribution to T_tension, contribution to D_dissipation (as a pressure release valve when met with concession) or to T_tension accumulation (when met with repression).
+
+**Slot 8 — Regime force response intensity**
+The rate or count of coercive actions taken by the Configuration against the population. Measures the regime's operational reliance on Dominion.
+Contemporary measurement: ACLED violence against civilians and battle events involving state actors, political imprisonment data, HRW/AI annual reports.
+Historical measurement: execution records, political trial records, deportation or exile records, suppression of assemblies, military deployment against civilians.
+What the model computes from this: contribution to CODA_D_dom, contribution to R_repression, contribution to T_tension accumulation, contribution to T"(α) increase.
+
+**Slot 9 — Information field conductivity**
+The capacity of information to propagate across the Mass without institutional interception. Sets the effective reach and speed of both popular and regime inforays. Low conductivity isolates grievances geographically; high conductivity enables narrative synchronization across the Mass volume.
+Contemporary measurement: internet penetration rate, mobile phone penetration rate, literacy rate, newspaper circulation per capita.
+Historical measurement: literacy rate, printing press density, postal network density, market day frequency (information exchange at markets), number of taverns or coffeehouses per capita, proportion of population in cities (urban density as a conductivity proxy).
+What the model computes from this: contribution to CODA_C_conn, inforay propagation reach estimates, narrative synchronization speed.
+
+### 38A.3 What the Model Calculates
+
+All TSR state variables are outputs of the model equations applied to the two input types. None of the following are inputs. All are calculated:
+
+C (Cohesion), T (Tension), Ψ (Narrative field coherence and divergence), H (Historical Inertia), Q (Configuration-Manifold coupling quality), K (Shock absorption capacity), D (Dissipation capacity), L (Legitimacy reserve), P (Political centralization), E (Economic stress), R (Repression index), Θ (Social Temperature), S (Social Entropy), E_m (Maintenance Energy), CS (Configuration Space magnitude), Δτ (Social proper time), x2 and x3 population centroid positions, α (angular separation), T'(α) and T"(α), PI_n, PI_w, PI_z and their ratios, CODA_C_conn, CODA_O_ord, CODA_D_dom, CODA_A_aut, CODA_imbalance, MDI* (Mass Disruption Index), regime phase classification, Economic Singularity mass, and all hazard indicators.
+
+The discipline is strict: if a quantity appears in the list above, it is never used as a direct input. If a quantity appears as an input slot, it is never treated as a model output.
+
+### 38A.4 The Event Log Schema
+
+Every Type 2 input event must be recorded with the following minimum properties:
+
+- Date (as precise as available: daily for crisis periods, monthly or annual for background periods)
+- Origin: x2 and x3 coordinates of the emitting entity or location
+- Content vector: relative loading across x1 (economic), x2 (ideological), x3 (cultural/identity) axes, normalized so the three components sum to 1.0
+- Intensity: magnitude of the initial emission (0 to 1 scale, estimated from event scale, media reach, and participant count)
+- Narrative charge q_n: alignment or misalignment of event content with latent population grievance vector (positive = consonant, negative = dissonant)
+- Interaction mode: one of the five canonical inforay modes (constructive absorption, rejection, distortive absorption, amplification, scattering)
+- Symbolic criticality: estimated 0 to 1 score reflecting how many axes are simultaneously loaded and how tightly the content couples to latent Mass surface conditions
+- Propagation reach: local / regional / national / international
+- Regime response: nature, timing relative to event, and estimated effect on T'(α) of the response inforay
+- Systemic outcome: observed short-term effect on the state vector (which variables shifted and in which direction)
+
+Events without all fields can still be entered with available fields populated and the rest marked as uncertain. Incomplete event records are preferable to omission.
+
+### 38A.5 The Non-Event as Evidence
+
+Events that did not propagate are as theoretically significant as events that did. The 2008 Gafsa protests and the 2010 Bouazizi immolation are both Type 2 inputs. Their different systemic outcomes are explained entirely by the difference in manifold conditions (Slot 1 through 9 values) and event properties (content vector loading, symbolic criticality, propagation reach) at the respective times. A model that can only explain triggering events but not non-triggering events is not a validated model. Both must be entered and both outcomes must be reproducible from the same equations with no post-hoc parameter adjustment.
+
+---
+
 ## 39. Output Conventions
 
 - Phase3_Hazard_Timeline.png
