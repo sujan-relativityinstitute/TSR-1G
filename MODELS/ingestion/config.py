@@ -65,14 +65,16 @@ WB_INDICATORS = {
 # Source: DATA/schema/v1/tsr_proxy_map.sql
 # -------------------------------------------------------------------------
 WEIGHTS = {
-    "C_cohesion":    {"trust": 0.35, "cpi": 0.25, "civil_lib": 0.20, "vdem": 0.20},
-    "T_tension":     {"youth_unemp": 0.30, "gini": 0.25, "repression": 0.25, "protest": 0.20},
-    "Theta":         {"food": 0.30, "unemployment": 0.30, "informal": 0.20, "poverty": 0.20},
-    "E_m":           {"education": 0.40, "health": 0.35, "social": 0.25},
-    "CODA_C_conn":   {"internet": 0.35, "mobile": 0.25, "ngo": 0.25, "union": 0.15},
-    "CODA_O_ord":    {"vdem": 0.40, "cpi": 0.35, "polity": 0.25},
-    "CODA_D_dom":    {"military": 0.40, "repression": 0.35, "polity_inv": 0.25},
-    "CODA_A_aut":    {"press_freedom": 0.35, "civil_lib": 0.35, "protest": 0.30},
+    # Keys reference only normalized columns computed from the 9 declared structural
+    # input slots (Section 38A.2). No placeholder, alias, or derived variable here.
+    "C_cohesion":    {"cpi": 0.45, "civil_lib": 0.35, "polity": 0.20},
+    "T_tension":     {"youth_unemp": 0.35, "gini": 0.30, "repression": 0.20, "protest": 0.15},
+    "Theta":         {"food": 0.45, "unemployment": 0.35, "poverty": 0.20},
+    "E_m":           {"education": 0.55, "health": 0.45},
+    "CODA_C_conn":   {"internet": 0.60, "mobile": 0.40},
+    "CODA_O_ord":    {"cpi": 0.55, "polity": 0.45},
+    "CODA_D_dom":    {"military": 0.45, "repression": 0.35, "polity_inv": 0.20},
+    "CODA_A_aut":    {"civil_lib": 0.60, "protest": 0.40},
     "MDI_star": {
         "T_tension": 0.20, "Q_mismatch": 0.15, "Psi_div": 0.15,
         "E_economic_stress": 0.15, "R_repression": 0.10,

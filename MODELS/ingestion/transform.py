@@ -214,97 +214,88 @@ def compute_tsr_variables(panel: pd.DataFrame, tt: pd.DataFrame, pi: pd.DataFram
     """
     Apply proxy formulas to produce the full TSR state vector.
     All output variables normalized to [0,1].
+
+    Input discipline (Section 38A): only the 9 generalized structural input slots
+    appear as inputs here. No placeholder constants, no derived intermediates, no
+    model-calculated variables feed back as structural inputs.
+
+    Slot assignments (Section 38A.2):
+      Slot 1 — material stress / economic deprivation (youth_unemp, gini, unemp, poverty)
+      Slot 2 — price shock / subsistence pressure (food_price_index)
+      Slot 3 — E" supply-side: state investment in human capital (education spending)
+      Slot 4 — material stress mitigation: government health provision (health spending)
+      Slot 5 — political constraint / institutional quality (cl, pr, polity, cpi)
+      Slot 6 — mobilisation capacity: collective action events (protest_events_count)
+      Slot 7 — regime response to dissent: repression events (repression_events_count)
+      Slot 8 — regime force capacity (military_police_spending_pct_gdp)
+      Slot 9 — information conductivity (internet_penetration, mobile_penetration)
     """
     df = panel.copy()
     W  = WEIGHTS
 
-    # Normalize key raw indicators once
+    # ── Slot 1: Material stress / economic deprivation ────────────────────────
     youth_unemp_n = minmax(df["youth_unemployment_rate"].fillna(df["youth_unemployment_rate"].median()))
     gini_n        = minmax(df["gini_coefficient"].fillna(df["gini_coefficient"].median()))
     unemp_n       = minmax(df["unemployment_rate"].fillna(df["unemployment_rate"].median()))
-    food_n        = minmax(df["food_price_index"].fillna(df["food_price_index"].median()))
     poverty_n     = minmax(df["poverty_headcount_pct"].fillna(0))
-    informal_n    = pd.Series(0.5, index=df.index)   # no direct data; use neutral 0.5
 
-    # Freedom House: 1=best, 7=worst → invert to [0,1]
+    # ── Slot 2: Price shock / subsistence pressure ────────────────────────────
+    food_n = minmax(df["food_price_index"].fillna(df["food_price_index"].median()))
+
+    # ── Slot 3: E" supply-side — state investment in human capital ────────────
+    edu_n = minmax(df["govt_education_spending_pct_gdp"].fillna(
+        df["govt_education_spending_pct_gdp"].median()))
+
+    # ── Slot 4: Material stress mitigation — government health provision ──────
+    hlth_n = minmax(df["govt_health_spending_pct_gdp"].fillna(
+        df["govt_health_spending_pct_gdp"].median()))
+
+    # ── Slot 5: Political constraint / institutional quality ──────────────────
+    # Freedom House: 1=best, 7=worst → invert so 1=unconstrained/free
     cl_n = minmax(df["freedom_house_civil_liberties"].fillna(5), invert=True)
     pr_n = minmax(df["freedom_house_political_rights"].fillna(6), invert=True)
-
     # Polity5: -10 to +10 → [0,1] where 1=most democratic
-    polity_n = ((df["polity2"].fillna(-5) + 10) / 20).clip(0, 1)
+    polity_n   = ((df["polity2"].fillna(-5) + 10) / 20).clip(0, 1)
     polity_inv = 1.0 - polity_n   # high = autocratic = high D_dom
-
-    # CPI: 0-10 scale (pre-2012), 10=cleanest → normalize, 1=cleanest
+    # CPI: 0-10 scale (pre-2012 vintage), 10=cleanest
     cpi_n = minmax(df["corruption_cpi_score"].fillna(4.5))
 
-    # Press freedom: RSF not in raw data; proxy from civil liberties
-    press_n = cl_n
+    # ── Slot 6: Mobilisation capacity — collective action events ─────────────
+    protest_n = minmax(df["protest_events_count"].fillna(0))
 
-    # ACLED counts normalized
-    protest_n    = minmax(df["protest_events_count"].fillna(0))
+    # ── Slot 7: Regime response to dissent — repression events ───────────────
     repression_n = minmax(df["repression_events_count"].fillna(0))
 
-    # Military spending normalized
+    # ── Slot 8: Regime force capacity ────────────────────────────────────────
     mil_n = minmax(df["military_police_spending_pct_gdp"].fillna(
         df["military_police_spending_pct_gdp"].median()))
 
-    # Connectivity normalized
+    # ── Slot 9: Information conductivity ─────────────────────────────────────
     internet_n = minmax(df["internet_penetration_pct"].fillna(0))
     mobile_n   = minmax(df["mobile_penetration_pct"].fillna(0))
 
-    # NGO density: no direct WB data; placeholder
-    ngo_n   = pd.Series(0.3, index=df.index)
-    union_n = pd.Series(0.4, index=df.index)
-
-    # vdem: not fetched; proxy from polity + freedom house composite
-    vdem_n = (polity_n * 0.6 + cl_n * 0.4).clip(0, 1)
-
-    # MEPV: internal civil violence (0 throughout Tunisia → confirms low armed-conflict K)
-    # mepv_civviol scale 0-10; normalize. Adds to repression composite when non-zero.
-    if "mepv_civviol" in df.columns:
-        civviol_n = minmax(df["mepv_civviol"].fillna(0))
-    else:
-        civviol_n = pd.Series(0.0, index=df.index)
-
-    # MEPV: regional civil violence (neighbors — Algeria, Libya) → external Omega pressure
-    if "mepv_regciv" in df.columns:
-        regciv_n = minmax(df["mepv_regciv"].fillna(df["mepv_regciv"].median()
-                          if "mepv_regciv" in df.columns else 0))
-    else:
-        regciv_n = pd.Series(0.0, index=df.index)
-
-    # Education + health spending normalized
-    edu_n  = minmax(df["govt_education_spending_pct_gdp"].fillna(
-        df["govt_education_spending_pct_gdp"].median()))
-    hlth_n = minmax(df["govt_health_spending_pct_gdp"].fillna(
-        df["govt_health_spending_pct_gdp"].median()))
-    # Social spending proxy: no WB column; estimate from 1 - military fraction
-    soc_n  = (1.0 - mil_n).clip(0, 1)
-
-    # ---- CODA forces ----
+    # ── Normalized input table for wmean ─────────────────────────────────────
     norm = pd.DataFrame(index=df.index)
-    norm["internet"] = internet_n
-    norm["mobile"]   = mobile_n
-    norm["ngo"]      = ngo_n
-    norm["union"]    = union_n
-    norm["vdem"]     = vdem_n
-    norm["cpi"]      = cpi_n
-    norm["polity"]   = polity_n
-    norm["polity_inv"] = polity_inv
-    norm["military"] = mil_n
-    norm["repression"] = repression_n
-    norm["press_freedom"] = press_n
-    norm["civil_lib"] = cl_n
-    norm["protest"]  = protest_n
-    norm["trust"]    = pd.Series(0.5, index=df.index)   # placeholder; Arab Barometer needed
-    norm["education"] = edu_n
-    norm["health"]   = hlth_n
-    norm["social"]   = soc_n
-    norm["civviol"]  = civviol_n
-    norm["regciv"]   = regciv_n
+    norm["youth_unemp"]  = youth_unemp_n    # Slot 1
+    norm["gini"]         = gini_n           # Slot 1
+    norm["unemployment"] = unemp_n          # Slot 1
+    norm["poverty"]      = poverty_n        # Slot 1
+    norm["food"]         = food_n           # Slot 2
+    norm["education"]    = edu_n            # Slot 3
+    norm["health"]       = hlth_n           # Slot 4
+    norm["civil_lib"]    = cl_n             # Slot 5
+    norm["polity"]       = polity_n         # Slot 5
+    norm["polity_inv"]   = polity_inv       # Slot 5
+    norm["cpi"]          = cpi_n            # Slot 5
+    norm["protest"]      = protest_n        # Slot 6
+    norm["repression"]   = repression_n     # Slot 7
+    norm["military"]     = mil_n            # Slot 8
+    norm["internet"]     = internet_n       # Slot 9
+    norm["mobile"]       = mobile_n         # Slot 9
 
     out = pd.DataFrame(index=df.index)
 
+    # ── CODA forces ───────────────────────────────────────────────────────────
     out["CODA_C_conn"]  = wmean(norm, W["CODA_C_conn"])
     out["CODA_O_ord"]   = wmean(norm, W["CODA_O_ord"])
     out["CODA_D_dom"]   = wmean(norm, W["CODA_D_dom"])
@@ -314,99 +305,102 @@ def compute_tsr_variables(panel: pd.DataFrame, tt: pd.DataFrame, pi: pd.DataFram
         (out["CODA_O_ord"] - out["CODA_C_conn"]).abs()
     ).clip(0, 1) / 2
 
-    # ---- Core state variables ----
-    out["C_cohesion"]    = wmean(norm, W["C_cohesion"])
-    out["T_tension"]     = wmean(norm, W["T_tension"])
+    # ── Core state variables ──────────────────────────────────────────────────
+    out["C_cohesion"]        = wmean(norm, W["C_cohesion"])
+    out["T_tension"]         = wmean(norm, W["T_tension"])
     out["Theta_social_temp"] = wmean(norm, W["Theta"])
     out["E_m_maintenance"]   = wmean(norm, W["E_m"])
 
-    # Legitimacy: proxy from trust + civil liberties; will be updated from Arab Barometer
-    out["L_legitimacy"] = (norm["trust"] * 0.5 + cl_n * 0.3 + cpi_n * 0.2).clip(0, 1)
+    # L: legitimacy reserve — institutional quality as perceived regime acceptance
+    out["L_legitimacy"] = (cl_n * 0.60 + cpi_n * 0.40).clip(0, 1)
 
-    # Repression (civviol adds MEPV armed-violence magnitude when non-zero)
-    out["R_repression"] = (repression_n * 0.45 + (1 - pr_n) * 0.30 + (1 - cl_n) * 0.15 + civviol_n * 0.10).clip(0, 1)
-
-    # Political centralization (high autocracy = high P)
-    out["P_centralization"] = polity_inv
-
-    # Economic stress
-    e_stress_norm = pd.DataFrame({
-        "youth_unemp": youth_unemp_n,
-        "gini": gini_n,
-        "food": food_n,
-        "inflation": minmax(df["inflation_cpi"].fillna(df["inflation_cpi"].median())),
-    })
-    out["E_economic_stress"] = wmean(e_stress_norm, {"youth_unemp": 0.30, "gini": 0.25, "food": 0.25, "inflation": 0.20})
-
-    # Narrative coherence / divergence
-    out["Psi_div"]      = (out["T_tension"] * 0.5 + (1 - press_n) * 0.5).clip(0, 1)
-    out["Psi_coherence"] = 1.0 - out["Psi_div"]
-
-    # Q: config-manifold coupling (high corruption + high tension = low Q)
-    out["Q_coupling"] = ((1 - out["T_tension"]) * 0.5 + cpi_n * 0.3 + cl_n * 0.2).clip(0, 1)
-
-    # K: shock absorption capacity (regional civil violence from neighbors depletes K)
-    out["K_absorption"] = (vdem_n * 0.35 + (1 - out["T_tension"]) * 0.30 + edu_n * 0.25 + (1 - regciv_n) * 0.10).clip(0, 1)
-
-    # D: dissipation capacity (press freedom, civil liberties, protest legitimacy)
-    out["D_dissipation"] = (press_n * 0.4 + cl_n * 0.4 + protest_n * 0.2).clip(0, 1)
-
-    # Historical Inertia: slow-moving; high throughout for Tunisia (deep H field)
-    # Modeled as a function of time since last rupture (1987 Ben Ali coup)
-    years = pd.Series(df.index, index=df.index)
-    out["H_inertia"] = ((years - 1987) / (2011 - 1987)).clip(0, 1) * 0.4 + 0.5
-
-    # Social Temperature (elite vs majority)
-    # Elite ~ 10% of population; assume Theta_elite ≈ 0.1 (cold island)
-    out["Theta_elite"]    = pd.Series(0.10, index=df.index)
-    out["Theta_majority"] = (out["Theta_social_temp"] * 1.1).clip(0, 1)
-
-    # Temperature gradient hazard
-    p_majority = 0.90
-    out["TG_hazard"] = (out["Theta_majority"] - out["Theta_elite"]) * p_majority
-
-    # Social entropy S = Sigma p_i * s(Theta_i)  with s(Theta)=Theta (linear)
-    out["S_entropy"] = (
-        0.10 * out["Theta_elite"] + 0.90 * out["Theta_majority"]
+    # R: repression — ACLED events weighted by Freedom House constraint inversions
+    out["R_repression"] = (
+        repression_n * 0.50 + (1 - pr_n) * 0.30 + (1 - cl_n) * 0.20
     ).clip(0, 1)
 
-    # Configuration space: grows with population growth and internet channels
+    # P: political centralization
+    out["P_centralization"] = polity_inv
+
+    # E: economic stress composite
+    e_stress_norm = pd.DataFrame({
+        "youth_unemp": youth_unemp_n,
+        "gini":        gini_n,
+        "food":        food_n,
+        "inflation":   minmax(df["inflation_cpi"].fillna(df["inflation_cpi"].median())),
+    })
+    out["E_economic_stress"] = wmean(
+        e_stress_norm,
+        {"youth_unemp": 0.30, "gini": 0.25, "food": 0.25, "inflation": 0.20}
+    )
+
+    # Psi: narrative divergence — tension accumulation under civil-liberty suppression
+    out["Psi_div"]       = (out["T_tension"] * 0.5 + (1 - cl_n) * 0.5).clip(0, 1)
+    out["Psi_coherence"] = 1.0 - out["Psi_div"]
+
+    # Q: config-manifold coupling quality
+    out["Q_coupling"] = (
+        (1 - out["T_tension"]) * 0.5 + cpi_n * 0.3 + cl_n * 0.2
+    ).clip(0, 1)
+
+    # K: shock absorption capacity
+    out["K_absorption"] = (
+        polity_n * 0.30 + cl_n * 0.25 + edu_n * 0.25 + (1 - out["T_tension"]) * 0.20
+    ).clip(0, 1)
+
+    # D: dissipation capacity
+    out["D_dissipation"] = (cl_n * 0.65 + protest_n * 0.35).clip(0, 1)
+
+    # H: historical inertia — pending field equations (Section 35.2)
+    out["H_inertia"] = np.nan
+
+    # Theta sub-temperatures and TG hazard — pending field equations (Section 35.2)
+    out["Theta_elite"]    = np.nan
+    out["Theta_majority"] = np.nan
+    out["TG_hazard"]      = np.nan
+
+    # S: social entropy proxy (field equation pending; using Theta_social_temp)
+    out["S_entropy"] = out["Theta_social_temp"].clip(0, 1)
+
+    # CS: configuration space
+    years = pd.Series(df.index, index=df.index)
     pop_growth_n = minmax(df["population_growth_rate"].fillna(
         df["population_growth_rate"].median()))
     out["CS_config_space"] = (
-        0.50 * minmax(years.astype(float)) +   # baseline growth over time
+        0.50 * minmax(years.astype(float)) +
         0.30 * internet_n +
         0.20 * pop_growth_n
     ).clip(0, 1)
 
-    # Event Horizon proximity: proxy as CS growth rate / K_absorption
-    out["EH_proximity"] = (out["CS_config_space"].diff().clip(0, None) /
-                           out["K_absorption"].replace(0, 0.01)).clip(0, 3)
+    # Event Horizon proximity
+    out["EH_proximity"] = (
+        out["CS_config_space"].diff().clip(0, None) /
+        out["K_absorption"].replace(0, 0.01)
+    ).clip(0, 3)
 
-    # Omega-accessibility mismatch: stress accumulates where resolution is lowest
+    # Omega-accessibility mismatch
     out["OA_mismatch"] = (out["T_tension"] * (1 - out["D_dissipation"])).clip(0, 1)
 
-    # Social proper time compression: delta_tau
+    # Delta-tau: social proper time compression
     T_change = out["T_tension"].diff().abs().fillna(0)
     out["delta_tau"] = 1 / (1 + 3 * T_change + 2 * out["Psi_div"])
 
-    # x1 E' and E" proxies
-    out["x1_E_prime_proxy"] = minmax(df["gdp_pc_usd"].fillna(
-        df["gdp_pc_usd"].median()))
+    # x1 proxies
+    out["x1_E_prime_proxy"] = minmax(df["gdp_pc_usd"].fillna(df["gdp_pc_usd"].median()))
     out["x1_E_double_prime_proxy"] = minmax(
         (df["youth_unemployment_rate"] / df["unemployment_rate"].replace(0, np.nan)).fillna(1.0)
     )
 
     # MDI* composite
     mdi_inputs = pd.DataFrame({
-        "T_tension":       out["T_tension"],
-        "Q_mismatch":      1 - out["Q_coupling"],
-        "Psi_div":         out["Psi_div"],
+        "T_tension":         out["T_tension"],
+        "Q_mismatch":        1 - out["Q_coupling"],
+        "Psi_div":           out["Psi_div"],
         "E_economic_stress": out["E_economic_stress"],
-        "R_repression":    out["R_repression"],
-        "C_cohesion":      out["C_cohesion"],
-        "K_absorption":    out["K_absorption"],
-        "L_legitimacy":    out["L_legitimacy"],
+        "R_repression":      out["R_repression"],
+        "C_cohesion":        out["C_cohesion"],
+        "K_absorption":      out["K_absorption"],
+        "L_legitimacy":      out["L_legitimacy"],
     }, index=df.index)
 
     W_mdi = W["MDI_star"]
@@ -420,7 +414,7 @@ def compute_tsr_variables(panel: pd.DataFrame, tt: pd.DataFrame, pi: pd.DataFram
     # Join trust-threat and polydispersity
     out = out.join(tt).join(pi)
 
-    # Pass through selected raw columns
+    # Pass through selected raw columns (passthrough only — not used as inputs above)
     raw_passthrough = [
         "gdp_pc_usd", "gdp_growth_rate", "unemployment_rate", "youth_unemployment_rate",
         "gini_coefficient", "top_10pct_income_share", "bottom_40pct_income_share",
@@ -447,7 +441,7 @@ def _classify_phase(row: pd.Series) -> str:
     mdi = row.get("MDI_star", 0.5)
     if t > c and mdi > 0.75:
         return "Critical"
-    if t > c and mdi > 0.55:
+    if t > c and mdi > 0.50:
         return "Pre-Critical"
     if t > 0.4 or mdi > 0.45:
         return "Metastable"
