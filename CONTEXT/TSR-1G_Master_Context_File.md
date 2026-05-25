@@ -37,6 +37,50 @@ TSR seeks to answer the following foundational questions:
 
 ---
 
+## 2A. Foundational Design Philosophy
+
+### The Principle of Structural Minimalism
+
+TSR is built on a single governing conviction: that the most powerful theories are not the most complicated ones. They are the ones whose simplicity is load-bearing.
+
+Einstein's field equation of General Relativity — G_μν = 8πT_μν — is a single tensorial statement. It fits on one line. Yet it accounts for the precession of Mercury's orbit, the bending of light around a massive body, the expansion of the universe, the existence of black holes, gravitational waves, and the large-scale geometry of spacetime itself. None of these phenomena required a separate equation. None required a new construct invented to explain each new observation. The single equation, applied to different initial conditions, boundary conditions, and matter distributions, generates all of them.
+
+This is the standard TSR aspires to.
+
+The ambition of TSR is not to explain every social phenomenon by adding a construct for it. It is to identify the smallest set of governing relationships from which the widest range of social phenomena emerge as natural consequences. Complexity of behavior must arise from the model applied to varied conditions, not from accumulating complexity in the model itself.
+
+### What This Means in Practice
+
+**Constructs are not added to explain observations.** If a social phenomenon appears that the current model does not reproduce, the first response is not to add a new variable. It is to ask whether the existing variables, applied correctly to the actual inputs, do produce the phenomenon. If they do not, the question is whether a fundamental relationship is missing or whether the inputs are incomplete. Only if the answer to both is yes does a new construct earn consideration — and then only if it generalizes across cases, not just the one that motivated it.
+
+**Every construct must be general or it is not a construct.** A variable invented to explain Tunisia and applicable nowhere else is not a TSR construct. It is a local patch. Patches are the path to theoretical incoherence. Every variable in TSR must be definable for any Mass in any era with no case-specific modification to its definition.
+
+**The model is iterated, not expanded.** When the model fails to reproduce observed behavior, the correct response is to refine the governing equations, recalibrate the input-to-variable mappings, or improve the input data quality. It is not to add a new output variable or a new weighting layer. The state vector is fixed. The field equations are fixed. Iterative improvement means improving precision within the architecture, not enlarging the architecture to accommodate each new finding.
+
+**Complexity is in the initial conditions and the inputs, not in the model.** The reason Tunisia 2011 unfolds differently from Gafsa 2008 is not that different equations apply. It is that the inputs differ: the manifold curvature is different, the event's symbolic criticality is different, the information field conductivity is different. The same model equations, applied to different input states, produce different outcomes. That is what a theory is supposed to do.
+
+**The model must be falsifiable through its predictions.** A model that can explain any observed outcome with sufficient post-hoc parameter adjustment is not a model. It is a fitting exercise. TSR must be capable of making advance predictions about regime trajectories — and of being wrong. The discipline of not adjusting parameters after the outcome is known is not optional. It is what distinguishes theory from narrative.
+
+### The GR Analogy as Governing Standard
+
+General Relativity is the reference point for TSR not because social systems are literally spacetime, but because GR demonstrates what a structural theory can achieve when its governing principle is simplicity of form combined with generality of application.
+
+GR does not have a separate equation for black holes, a separate equation for gravitational lensing, and a separate equation for cosmological expansion. It has one equation. The diversity of its applications arises from the diversity of the matter distributions and boundary conditions fed into that equation.
+
+TSR aims for the same architecture: a governing equation or minimal set of governing equations — fixed, non-negotiable, applicable to any single-Mass social system in any era — from which the full range of social dynamics emerges. The Tunisia collapse, the Roman decline, the Scandinavian stability, and the Eurozone stress all run through the same model. They differ in inputs, not in equations.
+
+This is why construct proliferation is treated as a failure mode, not a sign of theoretical richness. A theory that requires twenty specialized constructs to explain twenty cases has explained nothing. A theory that explains twenty cases with the same five constructs has discovered something real.
+
+### The Iterative Development Commitment
+
+TSR-1G is a first-generation theory. It will be wrong in specific ways that only become visible through application. The commitment is not to perfection of the first version but to disciplined iteration: run the model against cases, identify specific and reproducible failures, diagnose whether the failure is in the inputs, the mapping functions, or the governing equations, correct at the right level, and version the correction. Each generation of TSR must be lockable as a canonical baseline so that progress can be measured against a fixed reference.
+
+What is not acceptable is the accumulation of ad-hoc adjustments within a generation to make the model fit known outcomes. That path produces a model that is locally accurate and globally meaningless.
+
+The standard is not that the model fits the data. The standard is that the model, given only the inputs, produces outputs that could have been predicted before the outcomes were known.
+
+---
+
 ## 3. Constraints and Style Rules
 
 - No em dashes in any output.
