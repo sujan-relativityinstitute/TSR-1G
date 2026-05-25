@@ -13,6 +13,7 @@ Steps:
   5. Compute full TSR state vector
   6. Map annual panel → observation schedule rows
   7. Save to SQLite + CSV
+  8. Write Type 2 event log to SQLite
 """
 
 import argparse
@@ -27,6 +28,7 @@ if str(_repo_root) not in sys.path:
 from MODELS.ingestion.sources import world_bank, polity5, freedom_house, fao, acled
 from MODELS.ingestion import transform, load
 from MODELS.ingestion.config import DB_PATH
+from CASES.Tunisia import event_log
 
 
 def run(force: bool = False) -> None:
@@ -71,13 +73,18 @@ def run(force: bool = False) -> None:
     # ---- 6. Map to observation schedule ----
     obs = transform.map_to_obs_schedule(annual, monthly_fao=monthly_fao)
 
-    # ---- 7. Save ----
-    print("\n[7/7] Saving outputs...")
+    # ---- 7. Save structural panel ----
+    print("\n[7/8] Saving structural panel...")
     load.save(annual, obs)
+
+    # ---- 8. Write Type 2 event log ----
+    print("\n[8/8] Writing event log (Type 2 inputs)...")
+    event_log.write_to_db(DB_PATH)
 
     print("\nPipeline complete.")
     print(f"  Annual rows : {len(annual)} (1990-2011)")
     print(f"  Obs rows    : {len(obs)} observation points")
+    print(f"  Events      : {len(event_log.load())} inforay events")
     print(f"  Database    : {DB_PATH}")
     _print_coverage(annual)
 
