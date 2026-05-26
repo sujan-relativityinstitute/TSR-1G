@@ -27,7 +27,7 @@ REPO   = Path(__file__).resolve().parents[2]
 DB     = REPO / "CASES" / "Tunisia" / "data" / "tunisia_tsr.db"
 OUTDIR = REPO / "OUTPUTS" / "1b"
 OUTDIR.mkdir(parents=True, exist_ok=True)
-OUT    = OUTDIR / "Tunisia_Inforay_Event_Log.png"
+OUT    = OUTDIR / "1b Tunisia_Inforay_Event_Log.png"
 
 # ── Load event log ─────────────────────────────────────────────────────────────
 con = sqlite3.connect(DB)

@@ -25,7 +25,7 @@ REPO   = Path(__file__).resolve().parents[2]
 DATA   = REPO / "DATA" / "processed" / "tunisia" / "annual_panel.csv"
 OUTDIR = REPO / "OUTPUTS" / "1a"
 OUTDIR.mkdir(parents=True, exist_ok=True)
-OUT    = OUTDIR / "Tunisia_Regime_Phase_Trajectory.png"
+OUT    = OUTDIR / "1a Tunisia_Regime_Phase_Trajectory.png"
 
 # ── Load ──────────────────────────────────────────────────────────────────────
 df = pd.read_csv(DATA, index_col="year")

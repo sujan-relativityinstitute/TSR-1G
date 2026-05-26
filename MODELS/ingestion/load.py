@@ -36,8 +36,9 @@ def write_to_csv(annual: pd.DataFrame, obs: pd.DataFrame) -> None:
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
 
-    annual_path = OUTPUT_DIR / "Tunisia_annual_panel.csv"
-    obs_path    = OUTPUT_DIR / "Tunisia_obs_panel.csv"
+    sortie      = OUTPUT_DIR.name
+    annual_path = OUTPUT_DIR / f"{sortie} Tunisia_annual_panel.csv"
+    obs_path    = OUTPUT_DIR / f"{sortie} Tunisia_obs_panel.csv"
 
     annual.to_csv(annual_path)
     obs.to_csv(obs_path)
