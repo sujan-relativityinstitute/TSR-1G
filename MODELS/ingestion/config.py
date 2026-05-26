@@ -13,7 +13,7 @@ RAW_DIR      = REPO_ROOT / "DATA" / "raw"
 PROCESSED_DIR = REPO_ROOT / "DATA" / "processed" / "tunisia"
 CASE_DIR     = REPO_ROOT / "CASES" / "Tunisia"
 DB_PATH      = CASE_DIR / "data" / "tunisia_tsr.db"
-OUTPUT_DIR   = REPO_ROOT / "OUTPUTS" / "csv"
+OUTPUT_DIR   = REPO_ROOT / "OUTPUTS" / "1a"
 
 COUNTRY_WB   = "TUN"          # World Bank country code
 COUNTRY_NAME = "Tunisia"      # as used in Polity5 / Freedom House files

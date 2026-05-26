@@ -25,7 +25,7 @@ from pathlib import Path
 # ── Paths ─────────────────────────────────────────────────────────────────────
 REPO   = Path(__file__).resolve().parents[2]
 DB     = REPO / "CASES" / "Tunisia" / "data" / "tunisia_tsr.db"
-OUTDIR = REPO / "OUTPUTS" / "plots"
+OUTDIR = REPO / "OUTPUTS" / "1b"
 OUTDIR.mkdir(parents=True, exist_ok=True)
 OUT    = OUTDIR / "Tunisia_Inforay_Event_Log.png"
 
