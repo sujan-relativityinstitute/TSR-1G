@@ -408,6 +408,62 @@ def compute_tsr_variables(panel: pd.DataFrame, tt: pd.DataFrame, pi: pd.DataFram
         mdi_inputs[col] * w for col, w in W_mdi.items()
     ).clip(0, 1)
 
+    # ── Omega_latent: stored social potential energy under sustained repression ──
+    #
+    # Ω_total = Ω_expressed (kinetic, proxied by T_tension) + Ω_latent (stored).
+    # T_tension only sees the kinetic component. Under high repression the discharge
+    # valve closes and structural stress accumulates as latent potential energy --
+    # invisible to ACLED-based proxies.
+    #
+    # sigma_structural (Slots 1,2,3,4 -- repression-independent structural loading):
+    #   These accumulate regardless of whether the population can express grievances.
+    #
+    # sigma_valve (Slots 5,6,8 -- suppression closure factor):
+    #   Product form: latent energy requires both pressure AND a closed valve.
+    #   High structural loading behind an open valve discharges immediately.
+    #
+    # Omega_acc: time-integral of suppressed structural loading.
+    #   decay = 0.85 (calibration; to be derived from Section 35.2 field equations).
+    #   discharge: tension releases when protest is present, not suppressed,
+    #              and civil space exists.
+    OMEGA_DECAY = 0.85
+
+    gdp_pc_n = minmax(df["gdp_pc_usd"].fillna(df["gdp_pc_usd"].median()))
+
+    sigma_structural = (
+        youth_unemp_n    * 0.40   # Slot 3: frustrated positional gradient (E"/E')
+        + gini_n         * 0.30   # Slot 1: distributional stress
+        + food_n         * 0.20   # Slot 4: material stress
+        + (1 - gdp_pc_n) * 0.10  # Slot 2: economic level stress (inverted)
+    ).clip(0, 1)
+
+    sigma_valve = (
+        repression_n   * 0.50    # Slot 8: active force application
+        + (1 - cl_n)   * 0.30   # Slot 6: civil space closure
+        + (1 - pr_n)   * 0.20   # Slot 5: political space closure
+    ).clip(0, 1)
+
+    out["Omega_latent_inst"] = (sigma_structural * sigma_valve).clip(0, 1)
+    out["sigma_structural"]  = sigma_structural
+    out["sigma_valve"]       = sigma_valve
+
+    discharge = (protest_n * (1 - repression_n) * cl_n).clip(0, 1)
+
+    acc = 0.0
+    omega_acc_vals = []
+    for yr in sorted(out.index):
+        inst  = out.loc[yr, "Omega_latent_inst"]
+        disch = discharge.loc[yr]
+        acc   = OMEGA_DECAY * acc + inst * (1.0 - disch)
+        omega_acc_vals.append(acc)
+
+    omega_acc_raw = pd.Series(omega_acc_vals, index=sorted(out.index))
+    acc_min, acc_max = omega_acc_raw.min(), omega_acc_raw.max()
+    if acc_max > acc_min:
+        out["Omega_acc"] = ((omega_acc_raw - acc_min) / (acc_max - acc_min)).clip(0, 1)
+    else:
+        out["Omega_acc"] = 0.0
+
     # dT_tension: signed annual rate of change — T viewed as a process, not just a state.
     # Used by the phase classifier to detect rising-T dynamics (hidden fragility).
     # NaN for the first row → 0 (no prior year to compare).

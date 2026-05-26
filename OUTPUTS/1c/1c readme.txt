@@ -46,5 +46,35 @@ Theoretical grounding:
   high Omega_acc; only 2010 converted (difference is Slot 9 + multi_axis nucleation event,
   not Omega_acc itself).
 
+Key results (decay = 0.85):
+
+  year   T_tension   Omega_acc   phase
+  2008     0.065       0.252     Stable
+  2009     0.263       0.346     Metastable
+  2010     0.114       0.377     Stable  <-- highest pre-2011 Omega_acc despite lowest T
+  2011     0.886       1.000     Pre-Critical
+
+  2010 Omega_acc (0.377) exceeds 2009 (0.346) even as T_tension nearly halves.
+  This is the ticking time-bomb signal: expressed tension fell (repression suppressed
+  protest proxy) but accumulated latent energy continued to rise.
+
+Known calibration limitation:
+  sigma_valve is understated for 1990-2000. Freedom House scores for Tunisia barely
+  varied within the dataset's range, so minmax normalisation treats the "least bad"
+  year as cl_n=1.0 (fully open). The Ben Ali consolidation period (1991-2000) should
+  have a higher sigma_valve; using absolute FH scale instead of within-case minmax
+  would correct this. This does not affect the 2008-2011 period (ACLED data available,
+  FH scores did vary in those years).
+
+Pending:
+  - Phase classifier update: add Omega_acc gate (Omega_acc > threshold -> Metastable)
+    to correctly classify 2010. Threshold to be calibrated.
+  - Fix sigma_valve normalisation for pre-ACLED years (absolute FH scale).
+  - Derive decay parameter from Section 35.2 field equations.
+
 Outputs:
-  [To be filled after computation]
+  Tunisia_Omega_Latent.png  -- 3-panel figure (T vs Omega_acc, sigma decomposition,
+                               Omega_latent_inst with phase strip)
+  Tunisia_annual_panel.csv  -- updated with Omega_latent_inst, Omega_acc,
+                               sigma_structural, sigma_valve columns
+  Tunisia_obs_panel.csv     -- observation schedule
