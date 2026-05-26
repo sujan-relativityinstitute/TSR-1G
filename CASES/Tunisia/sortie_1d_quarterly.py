@@ -121,13 +121,13 @@ CIVIL_ADJ = [
     0.30,                       # 2011-Q1: full censorship escalation + activist account hacking
 ]
 
-# Key events for figure annotation
+# Key events for figure annotation  (label, top_or_bottom)
 KEY_EVENTS = {
-    '2008-Q1': 'Gafsa protests\nbegin (Jan 5)',
-    '2008-Q2': 'Gafsa killings\n(Jun 6)',
-    '2009-Q4': 'Ben Ali re-elected\n89.62% (Oct 25)',
-    '2010-Q2': 'Sidi Bouzid\npeasant protests',
-    '2010-Q4': 'WikiLeaks (Nov 28)\nBouazizi (Dec 17)',
+    '2008-Q1': ('Gafsa protests\nbegin (Jan 5)',  'bottom'),
+    '2008-Q2': ('Gafsa killings\n(Jun 6)',         'bottom'),
+    '2009-Q4': ('Ben Ali re-elected\n89.62% (Oct 25)', 'top'),
+    '2010-Q2': ('Sidi Bouzid\npeasant protests',   'top'),
+    '2010-Q4': ('WikiLeaks (Nov 28)\nBouazizi (Dec 17)', 'top'),
 }
 
 # =============================================================================
@@ -302,20 +302,12 @@ ax.axvline(11.5, color='#555555', lw=1.2, ls=':', alpha=0.6)
 ax.text(11.6, 0.95, '2011: expression\n(disregarded as\nprecursor)', fontsize=7,
         color='#888888', va='top')
 
-ax.set_ylim(-0.05, 1.25)
+ax.set_ylim(-0.05, 1.40)
 ax.set_ylabel('Normalised value  [0, 1]', fontsize=9)
 ax.set_title('Tunisia 2008-2011  |  TSR-1G Sortie 1d: Quarterly Omega Latent Analysis',
              fontsize=13, fontweight='bold', pad=10, loc='left')
 
-leg = ax.legend(loc='upper left', fontsize=8, framealpha=0.88, edgecolor='#cccccc')
-ax.add_artist(leg)
-phase_patches = [mpatches.Patch(facecolor=PHASE_COLORS[p], edgecolor=PHASE_EDGE[p],
-                                linewidth=0.8, label=p)
-                 for p in ['Stable', 'Metastable', 'Pre-Critical', 'Critical']]
-ax.legend(handles=phase_patches, loc='lower left', fontsize=7.5,
-          framealpha=0.88, edgecolor='#cccccc', ncol=4,
-          title='Phase (Omega_acc-based)', title_fontsize=7)
-ax.add_artist(leg)
+ax.legend(loc='upper left', fontsize=8, framealpha=0.88, edgecolor='#cccccc')
 
 # ── Panel B: sigma_structural and sigma_valve ───────────────────────────────
 ax = axes[1]
@@ -354,20 +346,28 @@ ax.plot(xs, df['Omega_acc'] * scale, color='#8e44ad', lw=1.8, ls=':',
         label='Omega_acc  (scaled for shape reference)')
 
 ax.axvline(11.5, color='#555555', lw=1.2, ls=':', alpha=0.6)
-ax.set_ylim(0, scale * 1.35)
+ax.set_ylim(0, scale * 1.40)
 ax.set_ylabel('Omega_latent_inst  [0, 1]', fontsize=9)
 ax.set_xlabel('Quarter', fontsize=9)
 ax.set_xticks(xs)
 ax.set_xticklabels(labels, fontsize=7.5)
-ax.legend(loc='upper left', fontsize=8, framealpha=0.88, edgecolor='#cccccc')
+
+phase_patches = [mpatches.Patch(facecolor=PHASE_COLORS[p], edgecolor=PHASE_EDGE[p],
+                                linewidth=0.8, label=p)
+                 for p in ['Stable', 'Metastable', 'Pre-Critical', 'Critical']]
+bar_handles, bar_labels = ax.get_legend_handles_labels()
+ax.legend(handles=bar_handles + phase_patches,
+          loc='upper left', fontsize=8, framealpha=0.88, edgecolor='#cccccc',
+          title='Phase (Omega_acc-based)', title_fontsize=7, ncol=2)
 
 # ── Event markers and annotations ───────────────────────────────────────────
-for q, label in KEY_EVENTS.items():
+for q, (label, pos) in KEY_EVENTS.items():
     xi = QUARTERS.index(q)
-    top_y = 1.18
+    y_ref = 1.18 if pos == 'top' else 1.0
+    va    = 'top'
     for ax in axes:
         ax.axvline(xi, color='#333333', lw=1.0, ls='--', alpha=0.5, zorder=6)
-    axes[0].text(xi, top_y, label, ha='center', va='top', fontsize=6.5,
+    axes[0].text(xi, y_ref, label, ha='center', va=va, fontsize=6.5,
                  color='#222222',
                  bbox=dict(boxstyle='round,pad=0.15', fc='white', ec='#cccccc', alpha=0.9))
 
@@ -377,8 +377,8 @@ rows = ['quarter        T_q   Omega_acc  phase']
 for q in key_q:
     r = df.loc[q]
     rows.append(f"{q}   {r['T_tension_q']:.3f}   {r['Omega_acc']:.3f}    {r['phase']}")
-axes[0].text(0.01, 0.46, '\n'.join(rows),
-             transform=axes[0].transAxes, fontsize=6.8, family='monospace', va='top',
+axes[0].text(3, 0.8, '\n'.join(rows),
+             fontsize=6.8, family='monospace', va='top',
              bbox=dict(boxstyle='round,pad=0.35', fc='white', ec='#cccccc', alpha=0.92))
 
 fig.tight_layout(rect=[0, 0, 1, 1], h_pad=2.5)
