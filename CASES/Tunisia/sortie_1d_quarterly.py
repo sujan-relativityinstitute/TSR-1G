@@ -13,6 +13,10 @@ Key changes vs sortie 1c:
   - FH civil liberties/political rights on absolute 1-7 scale
   - Civil space discrete-event adjustments per quarter
   - Omega_acc decay_q = 0.85^(1/4) = 0.963 per quarter
+
+Outputs:
+  1d Tunisia_Quarterly_2008_2011.png    -- standard palette
+  1d Tunisia_Quarterly_2008_2011_hc.png -- high-contrast / colorblind-safe (Wong 2011)
 """
 
 import numpy as np
@@ -27,8 +31,9 @@ from pathlib import Path
 REPO   = Path(__file__).resolve().parents[2]
 OUTDIR = REPO / "OUTPUTS" / "1d"
 OUTDIR.mkdir(parents=True, exist_ok=True)
-OUT_PNG = OUTDIR / "1d Tunisia_Quarterly_2008_2011.png"
-OUT_CSV = OUTDIR / "1d Tunisia_Quarterly_Panel.csv"
+OUT_PNG    = OUTDIR / "1d Tunisia_Quarterly_2008_2011.png"
+OUT_PNG_HC = OUTDIR / "1d Tunisia_Quarterly_2008_2011_hc.png"
+OUT_CSV    = OUTDIR / "1d Tunisia_Quarterly_Panel.csv"
 
 # =============================================================================
 # QUARTERLY INPUT DATA TABLE
@@ -233,22 +238,6 @@ df['Omega_acc'] = ((omega_acc_s - acc_lo) / (acc_hi - acc_lo)).clip(0, 1.5)
 df.to_csv(OUT_CSV)
 print(f"Quarterly panel:\n{df[['sigma_structural','sigma_valve','Omega_latent_inst','T_tension_q','Omega_acc']].round(3).to_string()}")
 
-# =============================================================================
-# FIGURE
-# =============================================================================
-PHASE_COLORS = {
-    'Stable':       '#d4edda',
-    'Metastable':   '#fff3cd',
-    'Pre-Critical': '#fde8d8',
-    'Critical':     '#f8d7da',
-}
-PHASE_EDGE = {
-    'Stable':       '#2d6a4f',
-    'Metastable':   '#b7791f',
-    'Pre-Critical': '#c05621',
-    'Critical':     '#9b1c1c',
-}
-
 # Simple phase estimate based on Omega_acc (precursor-aware)
 def qphase(row):
     oa = row['Omega_acc']
@@ -263,132 +252,196 @@ def qphase(row):
 
 df['phase'] = df.apply(qphase, axis=1)
 
-xs = np.arange(n)
+xs     = np.arange(n)
 labels = [q.replace('-', '\n') for q in QUARTERS]
+scale  = df['Omega_latent_inst'].max()
 
-fig, axes = plt.subplots(3, 1, figsize=(15, 12),
-                          gridspec_kw={'height_ratios': [3, 2, 2]},
-                          sharex=True)
-fig.patch.set_facecolor('#fafafa')
-for ax in axes:
-    ax.set_facecolor('#fafafa')
+# =============================================================================
+# COLOR SCHEMES
+# =============================================================================
 
-plt.rcParams.update({
-    'font.family': 'sans-serif',
-    'font.size':   9.5,
-    'axes.spines.top':   False,
-    'axes.spines.right': False,
-})
+# Standard palette
+STANDARD_CS = dict(
+    phase_bg = {
+        'Stable':       '#d4edda',
+        'Metastable':   '#fff3cd',
+        'Pre-Critical': '#fde8d8',
+        'Critical':     '#f8d7da',
+    },
+    phase_edge = {
+        'Stable':       '#2d6a4f',
+        'Metastable':   '#b7791f',
+        'Pre-Critical': '#c05621',
+        'Critical':     '#9b1c1c',
+    },
+    t_tension   = '#e67e22',
+    omega_acc   = '#8e44ad',
+    fill        = '#8e44ad',
+    sig_struct  = '#c0392b',
+    sig_valve   = '#2980b9',
+    latent_fill = '#8e44ad',
+    ffpi        = '#e67e22',
+    fig_bg      = '#fafafa',
+)
 
-# Phase background spans (Panel A)
-for xi, q in enumerate(QUARTERS):
-    ph = df.loc[q, 'phase']
+# High-contrast / colorblind-safe palette (Wong 2011)
+# Black=#000000, Orange=#E69F00, Sky blue=#56B4E9, Bluish green=#009E73,
+# Yellow=#F0E442, Blue=#0072B2, Vermillion=#D55E00, Reddish purple=#CC79A7
+HC_CS = dict(
+    phase_bg = {
+        'Stable':       '#D6EAF8',   # light blue
+        'Metastable':   '#FEF9E7',   # light yellow
+        'Pre-Critical': '#FDEBD0',   # light orange
+        'Critical':     '#FADBD8',   # light red
+    },
+    phase_edge = {
+        'Stable':       '#0072B2',   # blue
+        'Metastable':   '#9A7D0A',   # dark amber
+        'Pre-Critical': '#D55E00',   # vermillion
+        'Critical':     '#8B0000',   # dark red
+    },
+    t_tension   = '#D55E00',         # vermillion -- dashed line
+    omega_acc   = '#0072B2',         # blue -- solid line
+    fill        = '#56B4E9',         # sky blue -- fill between
+    sig_struct  = '#D55E00',         # vermillion
+    sig_valve   = '#009E73',         # bluish green
+    latent_fill = '#CC79A7',         # reddish purple
+    ffpi        = '#E69F00',         # amber
+    fig_bg      = '#FFFFFF',         # white background for maximum contrast
+)
+
+# =============================================================================
+# FIGURE FUNCTION
+# =============================================================================
+
+def make_figure(cs, out_path):
+    fig, axes = plt.subplots(3, 1, figsize=(15, 12),
+                              gridspec_kw={'height_ratios': [3, 2, 2]},
+                              sharex=True)
+    fig.patch.set_facecolor(cs['fig_bg'])
     for ax in axes:
-        ax.axvspan(xi - 0.5, xi + 0.5, color=PHASE_COLORS[ph], alpha=0.35, zorder=0)
+        ax.set_facecolor(cs['fig_bg'])
 
-# ── Panel A: T_tension_q vs Omega_acc ──────────────────────────────────────
-ax = axes[0]
-ax.plot(xs, df['T_tension_q'], color='#e67e22', lw=2.0, ls='--', zorder=5,
-        label='T_q  (quarterly kinetic proxy)')
-ax.plot(xs, df['Omega_acc'],   color='#8e44ad', lw=2.6, zorder=5,
-        label='Omega_acc  (accumulated latent potential)')
-ax.fill_between(xs, df['T_tension_q'], df['Omega_acc'],
-                where=(df['Omega_acc'] > df['T_tension_q']),
-                color='#8e44ad', alpha=0.12, zorder=3,
-                label='Latent excess (Omega_acc > T_q)')
+    plt.rcParams.update({
+        'font.family': 'sans-serif',
+        'font.size':   9.5,
+        'axes.spines.top':   False,
+        'axes.spines.right': False,
+    })
 
-# 2011 boundary (user: disregard 2011 as expression, not precursor)
-ax.axvline(11.5, color='#555555', lw=1.2, ls=':', alpha=0.6)
-ax.text(11.6, 0.95, '2011: expression\n(disregarded as\nprecursor)', fontsize=7,
-        color='#888888', va='top')
+    # Phase background spans
+    for xi, q in enumerate(QUARTERS):
+        ph = df.loc[q, 'phase']
+        for ax in axes:
+            ax.axvspan(xi - 0.5, xi + 0.5, color=cs['phase_bg'][ph], alpha=0.35, zorder=0)
 
-ax.set_ylim(-0.05, 1.40)
-ax.set_ylabel('Normalised value  [0, 1]', fontsize=9)
-ax.set_title('Tunisia 2008-2011  |  TSR-1G Sortie 1d: Quarterly Omega Latent Analysis',
-             fontsize=13, fontweight='bold', pad=10, loc='left')
+    # ── Panel A: T_tension_q vs Omega_acc ──────────────────────────────────────
+    ax = axes[0]
+    ax.plot(xs, df['T_tension_q'], color=cs['t_tension'], lw=2.0, ls='--', zorder=5,
+            label='T_q  (quarterly kinetic proxy)')
+    ax.plot(xs, df['Omega_acc'],   color=cs['omega_acc'], lw=2.6, zorder=5,
+            label='Omega_acc  (accumulated latent potential)')
+    ax.fill_between(xs, df['T_tension_q'], df['Omega_acc'],
+                    where=(df['Omega_acc'] > df['T_tension_q']),
+                    color=cs['fill'], alpha=0.12, zorder=3,
+                    label='Latent excess (Omega_acc > T_q)')
 
-ax.legend(loc='upper left', fontsize=8, framealpha=0.88, edgecolor='#cccccc')
+    ax.axvline(11.5, color='#555555', lw=1.2, ls=':', alpha=0.6)
+    ax.text(11.6, 0.95, '2011: expression\n(disregarded as\nprecursor)', fontsize=7,
+            color='#888888', va='top')
 
-# ── Panel B: sigma_structural and sigma_valve ───────────────────────────────
-ax = axes[1]
-ax.plot(xs, df['sigma_structural'], color='#c0392b', lw=1.8,
-        label='sigma_structural  (Slots 1,2,3,4 -- structural loading)')
-ax.plot(xs, df['sigma_valve'],      color='#2980b9', lw=1.8, ls='--',
-        label='sigma_valve  (Slots 5,6,8 -- suppression closure; absolute FH scale)')
-ax.fill_between(xs, 0, df['Omega_latent_inst'], color='#8e44ad', alpha=0.18,
-                label='Omega_latent_inst  (product)')
-ax.axvline(11.5, color='#555555', lw=1.2, ls=':', alpha=0.6)
-ax.set_ylim(-0.02, 1.05)
-ax.set_ylabel('Normalised value  [0, 1]', fontsize=9)
-ax.legend(loc='upper left', fontsize=8, framealpha=0.88, edgecolor='#cccccc')
+    ax.set_ylim(-0.05, 1.40)
+    ax.set_ylabel('Normalised value  [0, 1]', fontsize=9)
+    ax.set_title('Tunisia 2008-2011  |  TSR-1G Sortie 1d: Quarterly Omega Latent Analysis',
+                 fontsize=13, fontweight='bold', pad=10, loc='left')
+    ax.legend(loc='upper left', fontsize=8, framealpha=0.88, edgecolor='#cccccc')
 
-# FFPI secondary line
-ax2 = ax.twinx()
-ax2.plot(xs, [f/214.0 for f in FFPI], color='#e67e22', lw=1.2, ls=':', alpha=0.6,
-         label='FFPI  (normalised, right axis)')
-ax2.set_ylabel('FFPI / 214  (2008 Q2 peak = 1.0)', fontsize=7.5, color='#e67e22')
-ax2.tick_params(axis='y', colors='#e67e22')
-ax2.set_ylim(-0.02, 1.8)
-ax2.spines['right'].set_color('#e67e22')
-ax2.spines['top'].set_visible(False)
-ax2.legend(loc='upper right', fontsize=7.5, framealpha=0.88, edgecolor='#cccccc')
+    # ── Panel B: sigma_structural and sigma_valve ───────────────────────────────
+    ax = axes[1]
+    ax.plot(xs, df['sigma_structural'], color=cs['sig_struct'], lw=1.8,
+            label='sigma_structural  (Slots 1,2,3,4 -- structural loading)')
+    ax.plot(xs, df['sigma_valve'],      color=cs['sig_valve'], lw=1.8, ls='--',
+            label='sigma_valve  (Slots 5,6,8 -- suppression closure; absolute FH scale)')
+    ax.fill_between(xs, 0, df['Omega_latent_inst'], color=cs['latent_fill'], alpha=0.18,
+                    label='Omega_latent_inst  (product)')
+    ax.axvline(11.5, color='#555555', lw=1.2, ls=':', alpha=0.6)
+    ax.set_ylim(-0.02, 1.05)
+    ax.set_ylabel('Normalised value  [0, 1]', fontsize=9)
+    ax.legend(loc='upper left', fontsize=8, framealpha=0.88, edgecolor='#cccccc')
 
-# ── Panel C: Omega_latent_inst bars + Omega_acc (for shape reference) ───────
-ax = axes[2]
-bar_colors = [PHASE_COLORS[df.loc[q, 'phase']] for q in QUARTERS]
-bar_edges  = [PHASE_EDGE[df.loc[q, 'phase']]  for q in QUARTERS]
-ax.bar(xs, df['Omega_latent_inst'], color=bar_colors, edgecolor=bar_edges,
-       linewidth=0.7, width=0.7, zorder=3, alpha=0.85,
-       label='Omega_latent_inst  (quarterly contribution)')
+    # FFPI secondary line
+    ax2 = ax.twinx()
+    ax2.plot(xs, [f/214.0 for f in FFPI], color=cs['ffpi'], lw=1.2, ls=':', alpha=0.6,
+             label='FFPI  (normalised, right axis)')
+    ax2.set_ylabel('FFPI / 214  (2008 Q2 peak = 1.0)', fontsize=7.5, color=cs['ffpi'])
+    ax2.tick_params(axis='y', colors=cs['ffpi'])
+    ax2.set_ylim(-0.02, 1.8)
+    ax2.spines['right'].set_color(cs['ffpi'])
+    ax2.spines['top'].set_visible(False)
+    ax2.legend(loc='upper right', fontsize=7.5, framealpha=0.88, edgecolor='#cccccc')
 
-scale = df['Omega_latent_inst'].max()
-ax.plot(xs, df['Omega_acc'] * scale, color='#8e44ad', lw=1.8, ls=':',
-        label='Omega_acc  (scaled for shape reference)')
+    # ── Panel C: Omega_latent_inst bars + Omega_acc ──────────────────────────────
+    ax = axes[2]
+    bar_colors = [cs['phase_bg'][df.loc[q, 'phase']]   for q in QUARTERS]
+    bar_edges  = [cs['phase_edge'][df.loc[q, 'phase']] for q in QUARTERS]
+    ax.bar(xs, df['Omega_latent_inst'], color=bar_colors, edgecolor=bar_edges,
+           linewidth=0.7, width=0.7, zorder=3, alpha=0.85,
+           label='Omega_latent_inst  (quarterly contribution)')
 
-ax.axvline(11.5, color='#555555', lw=1.2, ls=':', alpha=0.6)
-ax.set_ylim(0, scale * 1.40)
-ax.set_ylabel('Omega_latent_inst  [0, 1]', fontsize=9)
-ax.set_xlabel('Quarter', fontsize=9)
-ax.set_xticks(xs)
-ax.set_xticklabels(labels, fontsize=7.5)
+    ax.plot(xs, df['Omega_acc'] * scale, color=cs['omega_acc'], lw=1.8, ls=':',
+            label='Omega_acc  (scaled for shape reference)')
 
-# Phase name labels above each bar
-for xi, q in enumerate(QUARTERS):
-    ph  = df.loc[q, 'phase']
-    bh  = df.loc[q, 'Omega_latent_inst']
-    ax.text(xi, bh + scale * 0.02, ph, ha='center', va='bottom',
-            fontsize=5.0, rotation=90, color=PHASE_EDGE[ph], zorder=7)
+    ax.axvline(11.5, color='#555555', lw=1.2, ls=':', alpha=0.6)
+    ax.set_ylim(0, scale * 1.40)
+    ax.set_ylabel('Omega_latent_inst  [0, 1]', fontsize=9)
+    ax.set_xlabel('Quarter', fontsize=9)
+    ax.set_xticks(xs)
+    ax.set_xticklabels(labels, fontsize=7.5)
 
-phase_patches = [mpatches.Patch(facecolor=PHASE_COLORS[p], edgecolor=PHASE_EDGE[p],
-                                linewidth=0.8, label=p)
-                 for p in ['Stable', 'Metastable', 'Pre-Critical', 'Critical']]
-bar_handles, bar_labels = ax.get_legend_handles_labels()
-ax.legend(handles=bar_handles + phase_patches,
-          loc='upper left', fontsize=8, framealpha=0.88, edgecolor='#cccccc',
-          title='Phase (Omega_acc-based)', title_fontsize=7, ncol=2)
+    # Phase name labels above each bar
+    for xi, q in enumerate(QUARTERS):
+        ph = df.loc[q, 'phase']
+        bh = df.loc[q, 'Omega_latent_inst']
+        ax.text(xi, bh + scale * 0.02, ph, ha='center', va='bottom',
+                fontsize=7.5, rotation=90, color=cs['phase_edge'][ph], zorder=7)
 
-# ── Event markers and annotations ───────────────────────────────────────────
-for q, (label, pos) in KEY_EVENTS.items():
-    xi = QUARTERS.index(q)
-    y_ref = 1.18 if pos == 'top' else 1.0
-    va    = 'top'
-    for ax in axes:
-        ax.axvline(xi, color='#333333', lw=1.0, ls='--', alpha=0.5, zorder=6)
-    axes[0].text(xi, y_ref, label, ha='center', va=va, fontsize=6.5,
-                 color='#222222',
-                 bbox=dict(boxstyle='round,pad=0.15', fc='white', ec='#cccccc', alpha=0.9))
+    phase_patches = [mpatches.Patch(facecolor=cs['phase_bg'][p],
+                                    edgecolor=cs['phase_edge'][p],
+                                    linewidth=0.8, label=p)
+                     for p in ['Stable', 'Metastable', 'Pre-Critical', 'Critical']]
+    bar_handles, bar_labels_list = ax.get_legend_handles_labels()
+    ax.legend(handles=bar_handles + phase_patches,
+              loc='upper left', fontsize=8, framealpha=0.88, edgecolor='#cccccc',
+              title='Phase (Omega_acc-based)', title_fontsize=7, ncol=2)
 
-# ── Value table inset (key quarters) ─────────────────────────────────────────
-key_q = ['2008-Q2', '2009-Q1', '2009-Q4', '2010-Q2', '2010-Q3', '2010-Q4']
-rows = ['quarter        T_q   Omega_acc  phase']
-for q in key_q:
-    r = df.loc[q]
-    rows.append(f"{q}   {r['T_tension_q']:.3f}   {r['Omega_acc']:.3f}    {r['phase']}")
-axes[0].text(3, 0.8, '\n'.join(rows),
-             fontsize=6.8, family='monospace', va='top',
-             bbox=dict(boxstyle='round,pad=0.35', fc='white', ec='#cccccc', alpha=0.92))
+    # ── Event markers and annotations ───────────────────────────────────────────
+    for q, (label, pos) in KEY_EVENTS.items():
+        xi    = QUARTERS.index(q)
+        y_ref = 1.18 if pos == 'top' else 1.0
+        for ax in axes:
+            ax.axvline(xi, color='#333333', lw=1.0, ls='--', alpha=0.5, zorder=6)
+        axes[0].text(xi, y_ref, label, ha='center', va='top', fontsize=6.5,
+                     color='#222222',
+                     bbox=dict(boxstyle='round,pad=0.15', fc='white', ec='#cccccc', alpha=0.9))
 
-fig.tight_layout(rect=[0, 0, 1, 1], h_pad=2.5)
-plt.savefig(OUT_PNG, dpi=220, bbox_inches='tight', facecolor=fig.get_facecolor())
-plt.close()
-print(f"Saved: {OUT_PNG}")
+    # ── Value table inset (key quarters) ────────────────────────────────────────
+    key_q = ['2008-Q2', '2009-Q1', '2009-Q4', '2010-Q2', '2010-Q3', '2010-Q4']
+    rows = ['quarter        T_q   Omega_acc  phase']
+    for q in key_q:
+        r = df.loc[q]
+        rows.append(f"{q}   {r['T_tension_q']:.3f}   {r['Omega_acc']:.3f}    {r['phase']}")
+    axes[0].text(3, 0.8, '\n'.join(rows),
+                 fontsize=6.8, family='monospace', va='top',
+                 bbox=dict(boxstyle='round,pad=0.35', fc='white', ec='#cccccc', alpha=0.92))
+
+    fig.tight_layout(rect=[0, 0, 1, 1], h_pad=2.5)
+    plt.savefig(out_path, dpi=220, bbox_inches='tight', facecolor=fig.get_facecolor())
+    plt.close()
+    print(f"Saved: {out_path}")
+
+
+# =============================================================================
+# GENERATE BOTH VERSIONS
+# =============================================================================
+make_figure(STANDARD_CS, OUT_PNG)
+make_figure(HC_CS,       OUT_PNG_HC)
