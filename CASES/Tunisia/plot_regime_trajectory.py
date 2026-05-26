@@ -195,15 +195,16 @@ ax_d.set_ylim(0, 1)
 ax_d.spines["left"].set_visible(False)
 ax_d.spines["bottom"].set_visible(False)
 
-# Phase legend for Panel D
+# Phase legend — placed inside Panel A at lower left so year labels stay visible
 legend_patches = [
     mpatches.Patch(facecolor=PHASE_COLORS[p], edgecolor=PHASE_EDGE[p],
                    linewidth=0.8, label=p)
     for p in ["Stable", "Metastable", "Pre-Critical", "Critical"]
 ]
-ax_d.legend(handles=legend_patches, loc="lower right", fontsize=7,
-            framealpha=0.85, edgecolor="#cccccc", ncol=4,
-            bbox_to_anchor=(1.0, -0.5))
+axes[0].legend(handles=legend_patches, loc="lower left", fontsize=7,
+               framealpha=0.88, edgecolor="#cccccc", ncol=4,
+               title="Phase classification", title_fontsize=7)
+axes[0].add_artist(leg_a)
 
 # ── dT annotation on Metastable years ────────────────────────────────────────
 # Show dT value below the phase label so the trigger mechanism is visible
