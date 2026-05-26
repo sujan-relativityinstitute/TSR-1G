@@ -352,6 +352,13 @@ ax.set_xlabel('Quarter', fontsize=9)
 ax.set_xticks(xs)
 ax.set_xticklabels(labels, fontsize=7.5)
 
+# Phase name labels above each bar
+for xi, q in enumerate(QUARTERS):
+    ph  = df.loc[q, 'phase']
+    bh  = df.loc[q, 'Omega_latent_inst']
+    ax.text(xi, bh + scale * 0.02, ph, ha='center', va='bottom',
+            fontsize=5.0, rotation=90, color=PHASE_EDGE[ph], zorder=7)
+
 phase_patches = [mpatches.Patch(facecolor=PHASE_COLORS[p], edgecolor=PHASE_EDGE[p],
                                 linewidth=0.8, label=p)
                  for p in ['Stable', 'Metastable', 'Pre-Critical', 'Critical']]
