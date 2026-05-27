@@ -284,21 +284,27 @@ STANDARD_CS = dict(
     fig_bg      = '#fafafa',
 )
 
-# High-contrast / colorblind-safe palette (Wong 2011)
-# Black=#000000, Orange=#E69F00, Sky blue=#56B4E9, Bluish green=#009E73,
-# Yellow=#F0E442, Blue=#0072B2, Vermillion=#D55E00, Reddish purple=#CC79A7
+# High-contrast / colorblind-safe palette (Wong 2011 lines + bold fills)
+# Background spans use saturated mid-tones (alpha 0.35 still shows clearly).
+# phase_bar: bold near-primary fills for Panel C bars (alpha 0.92).
 HC_CS = dict(
     phase_bg = {
-        'Stable':       '#D6EAF8',   # light blue
-        'Metastable':   '#FEF9E7',   # light yellow
-        'Pre-Critical': '#FDEBD0',   # light orange
-        'Critical':     '#FADBD8',   # light red
+        'Stable':       '#64B5F6',   # Blue 300 -- saturated span background
+        'Metastable':   '#FFD54F',   # Amber 300
+        'Pre-Critical': '#FFB74D',   # Orange 300
+        'Critical':     '#E57373',   # Red 300
+    },
+    phase_bar = {
+        'Stable':       '#1565C0',   # Blue 800  -- near-primary blue
+        'Metastable':   '#F9A825',   # Amber 800 -- near-primary yellow
+        'Pre-Critical': '#E65100',   # Deep Orange 800 -- near-primary orange
+        'Critical':     '#C62828',   # Red 800   -- near-primary red
     },
     phase_edge = {
-        'Stable':       '#0072B2',   # blue
-        'Metastable':   '#9A7D0A',   # dark amber
-        'Pre-Critical': '#D55E00',   # vermillion
-        'Critical':     '#8B0000',   # dark red
+        'Stable':       '#003c8f',   # Blue 900 (very dark)
+        'Metastable':   '#c67c00',   # dark amber
+        'Pre-Critical': '#8d2400',   # very dark orange
+        'Critical':     '#7f0000',   # maroon
     },
     t_tension   = '#D55E00',         # vermillion -- dashed line
     omega_acc   = '#0072B2',         # blue -- solid line
@@ -306,7 +312,7 @@ HC_CS = dict(
     sig_struct  = '#D55E00',         # vermillion
     sig_valve   = '#009E73',         # bluish green
     latent_fill = '#CC79A7',         # reddish purple
-    ffpi        = '#E69F00',         # amber
+    ffpi        = '#444444',         # dark gray (amber was too close to yellow spans)
     fig_bg      = '#FFFFFF',         # white background for maximum contrast
 )
 
@@ -328,6 +334,10 @@ def make_figure(cs, out_path):
         'axes.spines.top':   False,
         'axes.spines.right': False,
     })
+
+    # Constrain x to exactly the data range
+    for ax in axes:
+        ax.set_xlim(-0.5, n - 0.5)
 
     # Phase background spans
     for xi, q in enumerate(QUARTERS):
@@ -365,7 +375,7 @@ def make_figure(cs, out_path):
     ax.fill_between(xs, 0, df['Omega_latent_inst'], color=cs['latent_fill'], alpha=0.18,
                     label='Omega_latent_inst  (product)')
     ax.axvline(11.5, color='#555555', lw=1.2, ls=':', alpha=0.6)
-    ax.set_ylim(-0.02, 1.05)
+    ax.set_ylim(-0.02, 1.20)
     ax.set_ylabel('Normalised value  [0, 1]', fontsize=9)
     ax.legend(loc='upper left', fontsize=8, framealpha=0.88, edgecolor='#cccccc')
 
@@ -378,14 +388,17 @@ def make_figure(cs, out_path):
     ax2.set_ylim(-0.02, 1.8)
     ax2.spines['right'].set_color(cs['ffpi'])
     ax2.spines['top'].set_visible(False)
-    ax2.legend(loc='upper right', fontsize=7.5, framealpha=0.88, edgecolor='#cccccc')
+    ax2.legend(loc='lower right', bbox_to_anchor=(0.808, 0.02),
+               bbox_transform=ax2.transAxes,
+               fontsize=7.5, framealpha=0.88, edgecolor='#cccccc')
 
     # ── Panel C: Omega_latent_inst bars + Omega_acc ──────────────────────────────
     ax = axes[2]
-    bar_colors = [cs['phase_bg'][df.loc[q, 'phase']]   for q in QUARTERS]
+    _bar_fill  = cs.get('phase_bar', cs['phase_bg'])
+    bar_colors = [_bar_fill[df.loc[q, 'phase']]        for q in QUARTERS]
     bar_edges  = [cs['phase_edge'][df.loc[q, 'phase']] for q in QUARTERS]
     ax.bar(xs, df['Omega_latent_inst'], color=bar_colors, edgecolor=bar_edges,
-           linewidth=0.7, width=0.7, zorder=3, alpha=0.85,
+           linewidth=1.2, width=0.7, zorder=3, alpha=0.92,
            label='Omega_latent_inst  (quarterly contribution)')
 
     ax.plot(xs, df['Omega_acc'] * scale, color=cs['omega_acc'], lw=1.8, ls=':',
@@ -405,7 +418,8 @@ def make_figure(cs, out_path):
         ax.text(xi, bh + scale * 0.02, ph, ha='center', va='bottom',
                 fontsize=7.5, rotation=90, color=cs['phase_edge'][ph], zorder=7)
 
-    phase_patches = [mpatches.Patch(facecolor=cs['phase_bg'][p],
+    _patch_fill = cs.get('phase_bar', cs['phase_bg'])
+    phase_patches = [mpatches.Patch(facecolor=_patch_fill[p],
                                     edgecolor=cs['phase_edge'][p],
                                     linewidth=0.8, label=p)
                      for p in ['Stable', 'Metastable', 'Pre-Critical', 'Critical']]
