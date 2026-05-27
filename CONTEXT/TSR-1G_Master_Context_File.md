@@ -248,6 +248,8 @@ PI_z = (Σ w_i · s_i³) / (Σ w_i · s_i²)
 
 PI_z is the ratio of the third moment to the second moment. It is sensitive to the very top of the tail, the ultra-elite fraction. Where PI_w reveals the presence of an elite tail, PI_z reveals the degree to which a tiny number of extreme-position actors dominates even the weight average. PI_z is always greater than or equal to PI_w, again with equality only in a monodisperse system.
 
+**Data requirement for PI_z:** The third moment requires individual-level or granular distributional data (at minimum decile or percentile shares, ideally microdata). Summary statistics such as the Gini coefficient characterize the second-moment spread of the distribution but do not independently resolve the third moment. A PI_z value derived algebraically from a Gini coefficient alone is a structural approximation of unknown sign and magnitude. When individual-level data is unavailable, PI_z must be recorded as NaN. Fabricated or algebraically-derived PI_z values are not acceptable as model inputs and will produce spurious EH_proximity and ultra-elite concentration diagnostics.
+
 ### 5.8.5 Diagnostic Ratios
 
 **PI_w / PI_n: Primary Stratification Index**
@@ -327,11 +329,14 @@ The formula T'(α) = cos²(α/2) is structurally identical to the quantum mechan
 
 ### 5.9.4 Axis Decomposition
 
-The total angle α decomposes into ideological and cultural components:
+The total angle α is the true angular separation between the Sol position vector and the sub-blob centroid vector in the x2-x3 plane. It is computed as the arccos of the normalized dot product:
 
-α₂ = angular distance along x2 between Sol position and sub-blob centroid
-α₃ = angular distance along x3 between Sol position and sub-blob centroid
-α = √(α₂² + α₃²)
+Let v_sol = (sol_x2, sol_x3) and v_pop = (pop_x2, pop_x3).
+
+cos(α) = (v_sol · v_pop) / (|v_sol| × |v_pop|)
+α = arccos(cos(α))     [clamped to [-1, 1] before arccos to handle floating-point errors]
+
+The Euclidean root-sum-square approximation α ≈ √(α₂² + α₃²), where α₂ and α₃ are individual axis angular offsets, is a small-angle approximation that diverges from the true angular separation as positions approach the edges of the x2-x3 square. All implementations must use the arccos form.
 
 This allows asymmetric diagnostic cases:
 
@@ -1219,6 +1224,8 @@ EH_proximity(t) = [d|CS|/dt] / [dConstraintCapacity/dt]
 
 When EH_proximity > 1 persistently, the system is approaching the Social Event Horizon.
 
+**Implementation note:** Both the numerator and denominator must be computed as rates of change (first derivatives over the time interval), not as levels. ConstraintCapacity is proxied by K (shock absorption capacity, Section 7.8). The denominator must be dK/dt -- the rate at which K is being replenished or depleted -- not the current level of K. Using the K level in the denominator confounds the size of the current buffer with its rate of change, which are structurally distinct: a system with high K but declining rapidly has a deteriorating constraint trajectory (EH_proximity rising); a system with low K but recovering has an improving trajectory (EH_proximity falling). The level alone cannot distinguish these cases.
+
 **Temperature gradient hazard:**
 
 TG_hazard(t) = [Theta_majority(t) - Theta_elite(t)] multiplied by p_majority
@@ -1701,7 +1708,24 @@ Omega is a scalar field distributed across the Mass volume. Its spatial distribu
 **Omega-Accessibility Mismatch:**
 OA_mismatch(t) = correlation(Omega(x, t), 1/E_acc(x, t))
 
-Positive OA_mismatch indicates stress accumulating where accessible energy for resolution is lowest. High OA_mismatch is a structural hazard indicator.
+Positive OA_mismatch indicates stress accumulating where accessible energy for resolution is lowest. High OA_mismatch is a structural hazard indicator. Note: this is a field-level definition requiring the full spatial distribution of Omega and E_acc. Scalar implementations that use aggregate proxies are approximations and must be labeled as such.
+
+**Omega_latent_inst (instantaneous latent potential energy):**
+Omega_latent_inst(t) = sigma_structural(t) × sigma_valve(t)
+
+Where sigma_structural captures repression-independent structural loading (Slots 1, 2, 3, 4) and sigma_valve captures suppression closure (Slots 5, 6, 8). The product form is theoretically required: latent potential energy accumulates only when structural loading is present AND dissipation is blocked. Either factor at zero collapses the product to zero. This is the compressed-spring analogy: compression force alone creates no stored energy if the spring is free to discharge; the constraint is equally necessary. An additive form cannot capture this interaction.
+
+**Discharge triple product:**
+discharge(t) = protest_n(t) × (1 - rep_n(t)) × cl_n_abs(t)
+
+Three conditions must be jointly present for latent potential to discharge: (1) protest_n > 0, protests are occurring; (2) (1 - rep_n) > 0, repression is not total; (3) cl_n_abs > 0, civil space exists for expression. Any one absent condition collapses discharge to zero. A protest event under full repression in a closed civil space deposits energy into Omega_acc rather than releasing it.
+
+**Omega_acc (accumulated latent potential with decay):**
+Omega_acc(t) = decay × Omega_acc(t-1) + Omega_latent_inst(t) × (1 - discharge(t))
+
+Where decay = annual_decay^(1/steps_per_year). For quarterly resolution: decay_q = 0.85^(1/4) ≈ 0.963. The 0.85 annual decay rate reflects 15% per-year background dissipation of accumulated potential under ambient conditions. This parameter is provisionally calibrated and should eventually be derived from the Section 35.2 field equations.
+
+Omega_acc is the operational realization of H (Historical Inertia, Section 7.6) for the tension field specifically: it is the accumulated memory of unresolved stress, decaying slowly over time, reset or amplified by each quarter's net loading.
 
 **Time Dilation Response Failure:**
 Response failure condition: delta-tau_outer(t) / delta-tau_inner(t) > B_institutional
@@ -1764,6 +1788,8 @@ C(t+1) = C(t) + a1·Ψ(t) + a2·Q(t) + a3·D(t) + a4·L(t) - a5·T(t) - a6·R(t)
 **Tension Update:**
 T(t+1) = T(t) + b1·E(t) + b2·Ineq(t) + b3·Q_mismatch(t) + b4·R(t) + b5·Shock(t) - b6·D(t) - b7·C(t)
 Where Q_mismatch(t) = 1 - Q(t)
+
+**Critical routing note on R(t):** The b4·R(t) term is a lagged effect. Repression at period t reduces dissipation channels and concentrates grievance, manifesting as elevated T at t+1. This is the theoretically correct pathway: R(t) feeds T(t+1), not T(t). Any proxy formula computing T_tension must respect this lag. Repression must not be added as a direct same-period term in a T_tension proxy because repression simultaneously appears in the valve closure pathway (sigma_valve) as a same-period suppression effect. Adding repression as a same-period additive term to T_tension alongside its appearance in sigma_valve creates double-counting: the same repression signal simultaneously suppresses expressed tension (correct) and increases the kinetic proxy supposed to measure expressed tension (circular). The corrected proxy routes repression only through sigma_valve (same period) and the lagged T accumulation (next period). See Section 38B.6 for the validated proxy formulation.
 
 **Narrative Coherence Update:**
 Ψ(t+1) = Ψ(t) + c1·T'(t) + c2·L(t) - c3·InfoFragmentation(t) - c4·EliteConflict(t) - c5·ShockNarrative(t)
@@ -2012,6 +2038,99 @@ Events that did not propagate are as theoretically significant as events that di
 
 ---
 
+## 38B. Validated Proxy Architecture -- Quarterly Implementation
+
+This section records the proxy formulas validated through the Tunisia case (sorties 1a-1e, primary quarterly output from 1d onwards). These are implementation choices, not theory. They represent a tested mapping from the 9-slot structural panel to TSR variables at quarterly resolution. Alternative mappings may be appropriate for other cases, eras, or data environments; all departures must be documented with rationale. The slot definitions in Section 38A.2 remain canonical and do not change.
+
+### 38B.1 Slot Assignments for sigma Components
+
+**sigma_structural** captures repression-independent structural loading. It draws from Slots 1, 2, 3, and 4:
+
+sigma_structural = youth_n × 0.40 + gini_n × 0.30 + ffpi_n × 0.20 + (1 - gdp_pc_n) × 0.10
+
+Where:
+- youth_n = Slot 3 (youth unemployment rate; normalized within precursor window)
+- gini_n = Slot 1 (Gini coefficient; normalized within precursor window)
+- ffpi_n = Slot 4 (FAO FFPI; normalized within precursor window, using quarterly averages)
+- (1 - gdp_pc_n) = Slot 2 inverted (GDP per capita normalized within precursor window; higher GDP = lower economic stress, so the inversion yields stress loading)
+
+**sigma_valve** captures suppression closure. It draws from Slots 5, 6, and 8:
+
+sigma_valve = rep_n × 0.50 + effective_civil_closure × 0.30 + (1 - pr_n_abs) × 0.20
+
+Where:
+- rep_n = Slot 8 (repression intensity; normalized within precursor window)
+- effective_civil_closure = (1 - cl_n_abs) + civil_adj (Slot 6 on absolute scale plus discrete within-year civil space events)
+- (1 - pr_n_abs) = Slot 5 inverted on absolute scale (political rights constraint; higher rights score = lower constraint, inversion yields closure loading)
+
+### 38B.2 Absolute FH Scale
+
+Freedom House Civil Liberties and Political Rights scores must be normalized on the absolute theoretical scale:
+
+cl_n_abs = (7 - cl_score) / 6
+pr_n_abs = (7 - pr_score) / 6
+
+Where cl_score and pr_score are raw FH scores (1 = most free, 7 = least free). The denominator 6 anchors to the theoretical range.
+
+Within-case minmax normalization is incorrect when a case has narrow within-case variation in FH scores (e.g., Tunisia's constant CL = 5 across all analysis quarters). Minmax across a constant produces cl_n = 0 or 1 for all periods, destroying the actual level of civil constraint. The absolute scale preserves the real constraint level regardless of within-case variation.
+
+### 38B.3 Omega_latent Product Form
+
+Omega_latent_inst(t) = sigma_structural(t) × sigma_valve(t)
+
+Both factors are necessary. Neither is sufficient alone. See Section 33 for the theoretical rationale (compressed-spring analogy). All implementations must use the product form. The additive alternative cannot capture the joint-necessity condition.
+
+### 38B.4 Discharge Triple Product
+
+discharge(t) = protest_n(t) × (1 - rep_n(t)) × cl_n_abs(t)
+
+Three conditions must be jointly met for potential energy to discharge through social expression. If any one factor is zero, discharge is zero. A protest event under maximum repression in a closed civil space adds to Omega_acc rather than reducing it. See Section 33 for the theoretical basis.
+
+### 38B.5 Omega_acc Accumulation
+
+Omega_acc(t) = decay_q × Omega_acc(t-1) + Omega_latent_inst(t) × (1 - discharge(t))
+
+decay_q = 0.85^(1/4) ≈ 0.963 per quarter (derived from annual decay = 0.85)
+
+The annual decay parameter of 0.85 is provisionally calibrated to the Tunisia case and should eventually be derived from the Section 35.2 field equations. Omega_acc is normalized within the precursor window only (see Section 38B.7). The 2011-Q1 revolution quarter is excluded from normalization but included in the analysis as a holdout validation observation.
+
+### 38B.6 T_tension Proxy (Kinetic Component)
+
+The kinetic tension proxy at quarterly resolution draws from Slots 1, 3, and 7 only:
+
+T_tension_q = youth_n × 0.45 + gini_n × 0.40 + protest_n × 0.15
+
+**Repression is excluded.** Section 35.2 routes R(t) to T(t+1), not T(t). Using repression as a same-period additive term in T_tension_q creates double-counting: repression simultaneously enters sigma_valve (suppressing expressed tension, same period) and would appear in the kinetic proxy that is supposed to measure expressed tension. This creates a circular artifact: high repression suppresses the proxy while also increasing it through the additive term. The corrected formulation routes repression only through sigma_valve (same period, closure effect) and the Omega_acc decay-accumulation path (next-period accumulation effect).
+
+### 38B.7 Precursor Normalization Convention
+
+All slot inputs are normalized within the precursor window only. The precursor window excludes the active expression period.
+
+**Definition:** The precursor window includes all periods up to and including the last pre-cascade quarter. The expression period (the quarter(s) in which phase transition is actively occurring, identifiable by T_tension_q saturating at or above 1.0 after precursor-window normalization) is excluded from normalization but retained for holdout validation.
+
+**Tunisia application:** Precursor window = 2008-Q1 through 2010-Q4 (12 quarters). Expression period = 2011-Q1 (excluded from normalization; used as holdout validation).
+
+Rationale: including the expression period in normalization allows the revolution quarter to define the scale maximum, artificially compressing all precursor values and erasing the precursor signal the model is designed to detect.
+
+### 38B.8 Phase Classification Gates (Omega_acc-Based)
+
+At quarterly resolution, regime phase is classified by Omega_acc gates with T_tension_q as a secondary trigger:
+
+| Condition | Phase |
+|---|---|
+| Omega_acc > 0.90 or T_tension_q > 0.85 | Critical |
+| Omega_acc > 0.65 or T_tension_q > 0.55 | Pre-Critical |
+| Omega_acc > 0.40 or T_tension_q > 0.30 | Metastable |
+| otherwise | Stable |
+
+Omega_acc is the primary classifier. T_tension_q acts as a secondary trigger for periods where kinetic expression is high even if accumulated potential has not crossed the Omega_acc gate. These thresholds are calibrated to the Tunisia case and should be treated as provisional for other cases until validated.
+
+### 38B.9 Default Temporal Resolution
+
+Quarterly cadence is the default for all TSR-1G case studies. Annual resolution is a fallback only when quarterly source data is genuinely unavailable for a critical slot. The Tunisia case demonstrated that annual averaging erases critical precursor signal: FFPI Q4-2010 at quarterly resolution = 136.7 versus annual average = 106.7, a 28% difference that is the difference between a Pre-Critical signal and a Stable one. The quarterly resolution requirement applies to all future case work.
+
+---
+
 ## 39. Output Conventions
 
 - Phase3_Hazard_Timeline.png
@@ -2055,6 +2174,8 @@ Regime response inforays (concessions, then repression) arrived after T' toward 
 Δτ compressed. What had built for years unfolded in weeks. The Political Sol lost legitimacy faster than it could reassert control.
 
 **TSR Classification:** Metastable to Political Singularity via Mode 4 inforay amplification and narrative synchronization cascade. The Gafsa 2008 non-event and the Bouazizi 2010 trigger illustrate how identical structural conditions can produce different outcomes when surface geometry, coupling coefficients, and propagation topology differ.
+
+**Quarterly computational finding (sorties 1d-1e):** The validated quarterly panel (2008-Q1 through 2011-Q1) confirms that Tunisia entered Pre-Critical phase in 2010-Q1 and Critical phase in 2010-Q4, both detectable before the Bouazizi cascade. Omega_acc crossed the Pre-Critical gate (> 0.65) in 2010-Q1 and the Critical gate (> 0.90) in 2010-Q4. The 2010-Q4 trigger conditions (WikiLeaks Nov 28, Bouazizi Dec 17) found a system already in the Critical regime, not a system pushed into crisis by the events themselves. Sortie 1e applies the D.4 audit correction (repression removed from T_tension_q; routes only through sigma_valve and discharge). Effect on T_tension_q: 2010-Q4 from 0.625 to 0.673. Phase classification is unchanged. Full quarterly data table is in OUTPUTS/1e/1e Tunisia_Quarterly_Panel.csv.
 
 ### 41.2 Egypt (2008–2011)
 
