@@ -13,7 +13,7 @@ RAW_DIR      = REPO_ROOT / "DATA" / "raw"
 PROCESSED_DIR = REPO_ROOT / "DATA" / "processed" / "tunisia"
 CASE_DIR     = REPO_ROOT / "CASES" / "Tunisia"
 DB_PATH      = CASE_DIR / "data" / "tunisia_tsr.db"
-OUTPUT_DIR   = REPO_ROOT / "OUTPUTS" / "1c"
+OUTPUT_DIR   = REPO_ROOT / "OUTPUTS" / "1e"
 
 COUNTRY_WB   = "TUN"          # World Bank country code
 COUNTRY_NAME = "Tunisia"      # as used in Polity5 / Freedom House files
@@ -68,7 +68,9 @@ WEIGHTS = {
     # Keys reference only normalized columns computed from the 9 declared structural
     # input slots (Section 38A.2). No placeholder, alias, or derived variable here.
     "C_cohesion":    {"cpi": 0.45, "civil_lib": 0.35, "polity": 0.20},
-    "T_tension":     {"youth_unemp": 0.35, "gini": 0.30, "repression": 0.20, "protest": 0.15},
+    # repression removed from T_tension (1e fix: it was double-counted through sigma_valve
+    # and R_repression; theory routes R -> T at next time step, not same-period input)
+    "T_tension":     {"youth_unemp": 0.45, "gini": 0.40, "protest": 0.15},
     "Theta":         {"food": 0.45, "unemployment": 0.35, "poverty": 0.20},
     "E_m":           {"education": 0.55, "health": 0.45},
     "CODA_C_conn":   {"internet": 0.60, "mobile": 0.40},

@@ -20,9 +20,9 @@ from pathlib import Path
 
 REPO   = Path(__file__).resolve().parents[2]
 DATA   = REPO / "DATA" / "processed" / "tunisia" / "annual_panel.csv"
-OUTDIR = REPO / "OUTPUTS" / "1c"
+OUTDIR = REPO / "OUTPUTS" / "1e"
 OUTDIR.mkdir(parents=True, exist_ok=True)
-OUT    = OUTDIR / "1c Tunisia_Omega_Latent.png"
+OUT    = OUTDIR / "1e Tunisia_Omega_Latent.png"
 
 df = pd.read_csv(DATA, index_col="year")
 years = df.index.values

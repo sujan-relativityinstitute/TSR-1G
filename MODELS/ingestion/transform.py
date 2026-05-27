@@ -130,15 +130,22 @@ def compute_polydispersity(panel: pd.DataFrame) -> pd.DataFrame:
         result["PI_w_x1"] = 5 * sum_q3 / sum_q2.replace(0, np.nan)
         result["PI_z_x1"] = 5 * sum_q4 / sum_q3.replace(0, np.nan)
     else:
-        # Gini-based approximation when quintile data is missing
-        # PI_w ≈ 1 + 2*Gini  (rough linear approximation)
+        # Gini-based fallback when quintile data is missing (1e fix, D.5).
+        # PI_w ≈ 1 + 2*Gini is a documented rough linear approximation.
+        # PI_z ≈ 1 + 4*Gini has no derivation from the moment ratio definitions:
+        # PI_z is tail-sensitive and Gini averages over the tail. Set to NaN.
+        # Flag column PI_gini_fallback = True so downstream consumers can filter.
         if "gini_coefficient" in panel.columns:
-            g = panel["gini_coefficient"] / 100   # assume stored as 0-100
+            g = panel["gini_coefficient"] / 100
             result["PI_w_x1"] = 1 + 2 * g
-            result["PI_z_x1"] = 1 + 4 * g         # rougher approximation
+            result["PI_z_x1"] = np.nan   # unreliable from Gini; requires quintile data
+            result["PI_gini_fallback"] = True
+            print("  WARNING: PI_z_x1 set to NaN -- Gini fallback cannot reliably "
+                  "estimate tail-sensitive z-moment. Provide quintile data for PI_z.")
         else:
             result["PI_w_x1"] = np.nan
             result["PI_z_x1"] = np.nan
+            result["PI_gini_fallback"] = True
 
     result["PIw_PIn_ratio"] = result["PI_w_x1"]   # PI_n = 1
     result["PIz_PIw_ratio"] = result["PI_z_x1"] / result["PI_w_x1"].replace(0, np.nan)
@@ -182,25 +189,35 @@ def compute_trust_threat(panel: pd.DataFrame) -> pd.DataFrame:
     result["x2_pop_centroid"] = x2_pop.clip(-1, 1)
     result["x3_pop_centroid"] = x3_pop.clip(-1, 1)
 
-    # Alpha: Euclidean distance in x2-x3 plane, scaled to [0, 180] degrees
-    max_dist = 2 * np.sqrt(2)   # maximum possible distance in [-1,+1]^2 space
-    dist = np.sqrt((SOL_X2 - result["x2_pop_centroid"])**2 +
-                   (SOL_X3 - result["x3_pop_centroid"])**2)
-    result["alpha_degrees"] = (dist / max_dist) * 180
+    # Alpha: angular separation between Sol position vector and pop centroid vector
+    # in the x2-x3 plane (Section 5.9). Uses arccos of cosine similarity between
+    # the two position vectors from the origin -- the geometrically correct definition.
+    # Previous versions used Euclidean distance scaled linearly to degrees, which
+    # diverges from true angular separation for large displacements (1e fix, D.1).
+    sol_mag = np.sqrt(SOL_X2**2 + SOL_X3**2)
+    pop_x2  = result["x2_pop_centroid"]
+    pop_x3  = result["x3_pop_centroid"]
+    pop_mag = np.sqrt(pop_x2**2 + pop_x3**2).clip(1e-9)
+    dot     = SOL_X2 * pop_x2 + SOL_X3 * pop_x3
+    cos_alpha = (dot / (sol_mag * pop_mag)).clip(-1.0, 1.0)
+    alpha_rad = np.arccos(cos_alpha)
+    result["alpha_degrees"] = np.degrees(alpha_rad)
 
-    alpha_rad = np.radians(result["alpha_degrees"])
-    result["T_prime_system"] = np.cos(alpha_rad / 2)**2
+    result["T_prime_system"]        = np.cos(alpha_rad / 2)**2
     result["T_double_prime_system"] = np.sin(alpha_rad / 2)**2
 
-    # Inner orbit (elite, alpha ~ 0.1): high T'
-    result["T_prime_inner_orbit"] = np.cos(np.radians(10) / 2)**2
+    # Orbital T' values: angular offsets from pop centroid alpha, not arbitrary
+    # Euclidean distance offsets (1e fix, D.6).
+    # Inner orbit (elite): calibrated at 15 degrees from Sol (close, not identical).
+    result["T_prime_inner_orbit"] = np.cos(np.radians(15) / 2)**2
 
-    # Outer orbit (mass, alpha ~ sol_alpha + 0.3 more divergent)
-    alpha_outer = (dist + 0.3).clip(0, max_dist) / max_dist * 180
+    # Outer orbit: pop centroid alpha + 20 degrees additional angular divergence.
+    alpha_deg   = result["alpha_degrees"]
+    alpha_outer = (alpha_deg + 20).clip(0, 180)
     result["T_prime_outer_orbit"] = np.cos(np.radians(alpha_outer) / 2)**2
 
-    # Interior region (even more divergent from Sol)
-    alpha_interior = (dist + 0.5).clip(0, max_dist) / max_dist * 180
+    # Interior region: pop centroid alpha + 35 degrees (most divergent from Sol).
+    alpha_interior = (alpha_deg + 35).clip(0, 180)
     result["T_prime_interior_region"] = np.cos(np.radians(alpha_interior) / 2)**2
 
     return result
@@ -372,13 +389,24 @@ def compute_tsr_variables(panel: pd.DataFrame, tt: pd.DataFrame, pi: pd.DataFram
         0.20 * pop_growth_n
     ).clip(0, 1)
 
-    # Event Horizon proximity
-    out["EH_proximity"] = (
-        out["CS_config_space"].diff().clip(0, None) /
-        out["K_absorption"].replace(0, 0.01)
-    ).clip(0, 3)
+    # Event Horizon proximity: dCS/dt divided by dK/dt (Section 16A.12).
+    # Previous versions divided dCS by K level, producing a dimensionally
+    # inconsistent rate/level ratio (1e fix, D.2). Correct denominator is the
+    # rate of change of constraint capacity. When dK <= 0 (K not growing or
+    # declining while CS grows), EH_proximity is at maximum danger.
+    dCS = out["CS_config_space"].diff().clip(0, None)
+    dK  = out["K_absorption"].diff()
+    out["EH_proximity"] = pd.Series(
+        np.where(dK > 1e-6, (dCS / dK).clip(0, 3),
+                 np.where(dCS > 0, 3.0, 0.0)),
+        index=out.index
+    ).fillna(0).clip(0, 3)
 
-    # Omega-accessibility mismatch
+    # OA_mismatch: scalar approximation (1e fix, D.3).
+    # Section 33 defines this as the spatial correlation of Omega(x1,x2,x3,t)
+    # with 1/E_acc(x1,x2,x3,t) -- a field-level quantity requiring sub-group data.
+    # Reduced here to a scalar product of system averages (high tension + low
+    # dissipation capacity). Correct direction, loses spatial information entirely.
     out["OA_mismatch"] = (out["T_tension"] * (1 - out["D_dissipation"])).clip(0, 1)
 
     # Delta-tau: social proper time compression
