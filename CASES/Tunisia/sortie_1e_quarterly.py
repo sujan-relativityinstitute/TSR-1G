@@ -17,8 +17,7 @@ All other 1d mechanics unchanged:
   - Omega_acc decay_q = 0.85^(1/4) = 0.963 per quarter
 
 Outputs:
-  1e Tunisia_Quarterly_2008_2011.png    -- standard palette
-  1e Tunisia_Quarterly_2008_2011_hc.png -- high-contrast / colorblind-safe (Wong 2011)
+  1e Tunisia_Quarterly_2008_2011.png    -- bold HC palette (Wong 2011), standard from 1e onwards
   1e Tunisia_Quarterly_Panel.csv
 """
 
@@ -34,9 +33,8 @@ from pathlib import Path
 REPO   = Path(__file__).resolve().parents[2]
 OUTDIR = REPO / "OUTPUTS" / "1e"
 OUTDIR.mkdir(parents=True, exist_ok=True)
-OUT_PNG    = OUTDIR / "1e Tunisia_Quarterly_2008_2011.png"
-OUT_PNG_HC = OUTDIR / "1e Tunisia_Quarterly_2008_2011_hc.png"
-OUT_CSV    = OUTDIR / "1e Tunisia_Quarterly_Panel.csv"
+OUT_PNG = OUTDIR / "1e Tunisia_Quarterly_2008_2011.png"
+OUT_CSV = OUTDIR / "1e Tunisia_Quarterly_Panel.csv"
 
 # =============================================================================
 # QUARTERLY INPUT DATA TABLE
@@ -260,32 +258,9 @@ labels = [q.replace('-', '\n') for q in QUARTERS]
 scale  = df['Omega_latent_inst'].max()
 
 # =============================================================================
-# COLOR SCHEMES
+# COLOR SCHEME -- bold HC palette (Wong 2011), standard from sortie 1e onwards
+# Subdued pastel scheme used in 1a-1d is permanently retired.
 # =============================================================================
-
-# Standard palette
-STANDARD_CS = dict(
-    phase_bg = {
-        'Stable':       '#d4edda',
-        'Metastable':   '#fff3cd',
-        'Pre-Critical': '#fde8d8',
-        'Critical':     '#f8d7da',
-    },
-    phase_edge = {
-        'Stable':       '#2d6a4f',
-        'Metastable':   '#b7791f',
-        'Pre-Critical': '#c05621',
-        'Critical':     '#9b1c1c',
-    },
-    t_tension   = '#e67e22',
-    omega_acc   = '#8e44ad',
-    fill        = '#8e44ad',
-    sig_struct  = '#c0392b',
-    sig_valve   = '#2980b9',
-    latent_fill = '#8e44ad',
-    ffpi        = '#e67e22',
-    fig_bg      = '#fafafa',
-)
 
 # High-contrast / colorblind-safe palette (Wong 2011 lines + bold fills)
 # Background spans use saturated mid-tones (alpha 0.35 still shows clearly).
@@ -365,7 +340,7 @@ def make_figure(cs, out_path):
 
     ax.set_ylim(-0.05, 1.40)
     ax.set_ylabel('Normalised value  [0, 1]', fontsize=9)
-    ax.set_title('Tunisia 2008-2011  |  TSR-1G Sortie 1d: Quarterly Omega Latent Analysis',
+    ax.set_title('Tunisia 2008-2011  |  TSR-1G Sortie 1e: Quarterly Omega Latent Analysis',
                  fontsize=13, fontweight='bold', pad=10, loc='left')
     ax.legend(loc='upper left', fontsize=8, framealpha=0.88, edgecolor='#cccccc')
 
@@ -457,8 +432,4 @@ def make_figure(cs, out_path):
     print(f"Saved: {out_path}")
 
 
-# =============================================================================
-# GENERATE BOTH VERSIONS
-# =============================================================================
-make_figure(STANDARD_CS, OUT_PNG)
-make_figure(HC_CS,       OUT_PNG_HC)
+make_figure(HC_CS, OUT_PNG)

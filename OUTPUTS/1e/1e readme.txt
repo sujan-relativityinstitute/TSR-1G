@@ -1,104 +1,75 @@
 Tunisia TSR-1G Analysis Sortie 1e
 Date: 2026-05-27
 
-Analysis: Annual structural panel -- Tunisia 1990-2011 (corrected).
-Baseline: Sortie 1c (Omega_latent) with six mathematical corrections from audit.
+Analysis: Quarterly structural panel -- Tunisia 2008 Q1 through 2011 Q1 (corrected).
+Baseline: Sortie 1d (quarterly Omega_latent) with audit fix D.4 applied.
+
+PRIMARY OUTPUT
+  1e Tunisia_Quarterly_2008_2011.png  -- 3-panel quarterly figure
+  1e Tunisia_Quarterly_Panel.csv      -- 13-row quarterly data table
+
+Color scheme: bold high-contrast palette (Wong 2011 colorblind-safe) adopted as
+the standard from sortie 1e onwards. The subdued pastel scheme used in sorties
+1a-1d is retired.
 
 ---
-CORRECTIONS FROM AUDIT
+CORRECTION FROM AUDIT (D.4 -- repression double-counting, MEDIUM severity)
 
-D.1 -- Alpha formula (HIGH severity)
-  Previous: dist = sqrt((SOL_X2-x2_pop)^2 + (SOL_X3-x3_pop)^2)
-            alpha = (dist / max_dist) * 180
-  This is Euclidean distance scaled linearly to degrees -- not angular separation.
-  For small separations the approximation is close; for large separations it diverges.
+repression_n previously entered the model through three simultaneous pathways:
+  1. T_tension_q    (weight 0.20) -- same-period kinetic proxy
+  2. sigma_valve    (weight 0.50) -- valve closure mechanism
+  3. R_repression   (weight 0.50 + political/civil components)
 
-  Corrected: alpha = arccos( (Sol . Pop) / (|Sol| * |Pop|) )
-  where Sol = (SOL_X2, SOL_X3) and Pop = (x2_pop_centroid, x3_pop_centroid)
-  are position vectors from the origin in the x2-x3 plane (Section 5.9).
-  This is the standard definition of angular separation between two vectors.
+Section 35.2 specifies R(t) affects T(t+1), not T(t). Using repression as a
+direct same-period input to T_tension creates an artifact: high repression
+simultaneously suppresses expressed tension (correct) and appears in the kinetic
+proxy that is supposed to measure expressed tension (circular). The same signal
+then arrives at MDI* through both T_tension and R_repression pathways.
 
-D.2 -- EH_proximity denominator (HIGH severity)
-  Previous: dCS / K  (rate divided by level -- dimensionally inconsistent)
-  Corrected: dCS / dK  (rate divided by rate, per Section 16A.12)
-  When dK <= 0 (constraint capacity not growing while CS expands), EH_proximity
-  is set to 3.0 (maximum). When dCS = 0, EH_proximity = 0.
+Corrected T_tension_q weights:
+  1d: youth_n*0.35 + gini_n*0.30 + rep_n*0.20 + protest_n*0.15
+  1e: youth_n*0.45 + gini_n*0.40 + protest_n*0.15
 
-D.3 -- OA_mismatch (MEDIUM severity -- label only, no formula change)
-  Section 33 defines OA_mismatch as a spatial field correlation:
-  Omega(x1,x2,x3,t) correlated with 1/E_acc(x1,x2,x3,t).
-  The code implements a scalar approximation (T_tension * (1 - D_dissipation)).
-  Correct direction but loses all spatial information. Explicitly labelled as
-  scalar approximation pending sub-group distributional data.
+T_tension_q is now a purely economic/distributional + protest kinetic proxy.
+Repression routes only through sigma_valve (valve closure) and the discharge
+formula (protest_n * (1-rep_n) * cl_n_abs).
 
-D.4 -- Repression double-counting (MEDIUM severity)
-  repression_n previously entered through three independent paths simultaneously:
-    - T_tension (weight 0.20) -- Section 35.2 routes R -> T at t+1, not same period
-    - sigma_valve (weight 0.50) -- correct mechanism for latent energy accumulation
-    - R_repression (weight 0.50 + political/civil components)
-  The same raw signal then arrived at MDI* through T_tension AND R_repression.
-  Corrected: repression removed from T_tension. Weights redistributed:
-    1c: {"youth_unemp": 0.35, "gini": 0.30, "repression": 0.20, "protest": 0.15}
-    1e: {"youth_unemp": 0.45, "gini": 0.40, "protest": 0.15}
-  T_tension is now a purely economic/distributional + protest expression proxy.
-  Repression routes only through sigma_valve and R_repression.
-
-D.5 -- Gini PI fallback (MEDIUM severity)
-  Previous: PI_z_x1 ≈ 1 + 4*Gini (no derivation from moment ratio definitions)
-  PI_z is tail-sensitive; Gini averages over the tail. The approximation is unreliable.
-  Corrected: PI_z_x1 = NaN when quintile data is unavailable. PI_gini_fallback flag
-  column added so downstream consumers can filter. PI_w_x1 ≈ 1 + 2*Gini retained
-  (rough linear approximation documented in inequality literature).
-
-D.6 -- Orbital T' hardcoded offsets (LOW severity)
-  Previous: T_prime_inner_orbit = cos^2(10/2) -- hardcoded, not derived
-            alpha_outer = (dist + 0.3) / max_dist * 180 -- arbitrary Euclidean offset
-            alpha_interior = (dist + 0.5) / max_dist * 180 -- same problem
-  Corrected: Inner orbit calibrated at 15 degrees angular separation from Sol.
-             Outer orbit = pop centroid alpha + 20 degrees.
-             Interior = pop centroid alpha + 35 degrees.
-  All offsets are now geometrically principled angular divergences, not Euclidean
-  distance offsets. Values (15, 20, 35) are calibration; the form is correct.
+Effect on results: T_tension_q is slightly higher in high-repression quarters
+because it no longer absorbs the repression signal that was suppressing it.
+2010-Q4: 0.625 (1d) -> 0.673 (1e). Phase classification unchanged.
 
 ---
-POSITIVE GAPS NOTED (no formula change -- formalization only)
+ALL OTHER 1d MECHANICS PRESERVED
 
-B.1 -- Omega_latent product form (Omega_latent_inst = sigma_structural * sigma_valve)
-  Confirmed as theoretically correct. To be formalized in context file as canonical
-  form for the latent energy mechanism (Section 33 does not write it explicitly).
-
-B.2 -- Discharge triple product (protest_n * (1 - repression_n) * cl_n)
-  Confirmed as theoretically correct. Follows from Section 14 dissipation channel
-  definitions. To be formalized in context file.
-
-B.3 -- sigma_structural / sigma_valve slot assignment
-  Slot 1-4 (economic/material) feed sigma_structural; Slots 5,6,8 feed sigma_valve.
-  Separation is theoretically grounded in the structural stress / suppression
-  distinction. To be formalized in context file.
+  - FFPI at quarterly resolution (FAO monthly archive, averaged to quarters)
+  - Absolute FH scale: cl_n = (7-cl_score)/6 = 0.333 constant for Tunisia
+  - Civil space discrete-event adjustments per quarter (CIVIL_ADJ vector)
+  - sigma_structural = sigma_s * sigma_v (product form, theoretically correct)
+  - Omega_acc decay_q = 0.85^(1/4) = 0.963 per quarter
+  - Normalization within precursor window (2008-Q1 to 2010-Q4)
+  - 2011-Q1 excluded from normalization (expression, not precursor)
 
 ---
-REGIME PHASES (1e corrected annual panel)
+KEY RESULTS (unchanged from 1d -- D.4 fix does not alter phase classification)
 
-  1990-1992: Stable
-  1993:      Metastable
-  1994:      Stable
-  1995:      Metastable
-  1996-1998: Metastable
-  1999:      Stable
-  2000:      Metastable
-  2001-2003: Stable
-  2004:      Metastable
-  2005-2010: Stable   (2010 still Stable at annual resolution -- documented limitation)
-  2011:      Pre-Critical
+  quarter        T_q    Omega_acc   phase
+  2008-Q2       0.350    0.104     Metastable   (Gafsa peak)
+  2009-Q1       0.350    0.299     Metastable   (post-Gafsa, recession)
+  2009-Q4       0.372    0.612     Metastable   (post-election crackdown)
+  2010-Q1       0.445    0.686     Pre-Critical (Omega_acc gate fires)
+  2010-Q2       0.517    0.772     Pre-Critical (Sidi Bouzid protests)
+  2010-Q3       0.589    0.867     Pre-Critical
+  2010-Q4       0.673    1.000     CRITICAL     (WikiLeaks Nov 28; Bouazizi Dec 17)
+  2011-Q1       1.000    1.499     [expression -- disregarded as precursor]
 
-NOTE: 2010 Stable classification at annual resolution is a known limitation.
-Quarterly analysis (Sortie 1d) correctly identifies 2010-Q1 as Pre-Critical and
-2010-Q4 as Critical. The annual panel averages the Q4 spike across the full year,
-suppressing the signal. This is a resolution problem, not a model failure.
+PRIMARY FINDING: Tunisia was Pre-Critical from 2010-Q1 and Critical in 2010-Q4,
+detectable before the Bouazizi cascade. Unchanged from sortie 1d.
 
 ---
-Outputs:
-  1e Tunisia_Regime_Phase_Trajectory.png  -- 4-panel annual figure (corrected)
-  1e Tunisia_Omega_Latent.png             -- 3-panel Omega_latent figure (corrected)
-  1e Tunisia_annual_panel.csv             -- 22 rows, corrected TSR state vector
-  1e Tunisia_obs_panel.csv                -- 43 observation rows
+NOTE ON ANNUAL OUTPUTS IN THIS FOLDER
+
+OUTPUTS/1e/ also contains annual pipeline outputs generated as a byproduct of
+applying the audit infrastructure fixes (alpha formula, EH_proximity denominator,
+OA_mismatch label, Gini PI_z fallback) to transform.py. Those are audit-corrected
+versions of the 1a/1c annual figures and are included for completeness, but the
+primary sortie 1e analysis is the quarterly panel above.
