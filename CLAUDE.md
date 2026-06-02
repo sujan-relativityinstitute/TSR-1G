@@ -27,18 +27,16 @@ This file is the canonical reference for all TSR-1G constructs, variables, defin
 
 ```
 TSR-1G/
-├── CONTEXT/          # Theory. Master context file lives here.
-├── MODELS/           # Python simulation and analysis code
+├── CONTEXT/                    # Theory. Master context file lives here.
+├── CONSTRUCT DEVELOPMENT/      # Saved construct conversation logs (see Section 11)
+├── MODELS/                     # Python simulation and analysis code
 ├── DATA/
-│   ├── raw/          # Original data. Never modify.
-│   └── processed/    # Cleaned and transformed data
-├── OUTPUTS/
-│   ├── plots/        # Generated figures
-│   ├── hazard_timelines/
-│   └── csv/          # Numerical outputs
-├── CASES/            # One subfolder per case study
-├── NOTEBOOKS/        # Exploratory analysis and visualization
-├── CLAUDE.md         # This file
+│   ├── raw/                    # Original data. Never modify.
+│   └── processed/              # Cleaned and transformed data
+├── OUTPUTS/                    # Analytical outputs, organized by sortie
+├── CASES/                      # One subfolder per case study
+├── NOTEBOOKS/                  # Exploratory analysis and visualization
+├── CLAUDE.md                   # This file
 └── README.md
 ```
 
@@ -176,3 +174,35 @@ git sync "[description of what changed]"
 - Use TSR-2G, TSR-3G for future generations
 - Strict terminology adherence throughout
 - Preserve the distinction between Configuration and Manifold at all times
+
+---
+
+## 11. Session Architecture
+
+TSR-1G work is divided across two Claude Code sessions with distinct scopes. Do not mix them.
+
+**TSR-1G-Construct** (this session type)
+- Purpose: theoretical construct development -- extending, refining, and formalizing the theory's architecture, constructs, definitions, and mathematical framework
+- In scope: exploratory theoretical discussion, field equation development, construct definition, analogy analysis, writing to CONTEXT/ and CONSTRUCT DEVELOPMENT/
+- Out of scope: running transform.py, generating plots, sortie work, pipeline execution
+
+**Turning the Crank** (separate session)
+- Purpose: empirical analytics -- running the pipeline, generating sorties, producing outputs
+- In scope: all code execution, data transformation, figure generation, sortie commits
+- Out of scope: theoretical construct development
+
+---
+
+## 12. Construct Conversations
+
+Exploratory theoretical discussions from TSR-1G-Construct sessions are saved to:
+
+```
+CONSTRUCT DEVELOPMENT/Construct Conversation YYYY-MM-DD.md
+```
+
+**Canonical document:** `CONTEXT/TSR-1G_Master_Context_File.md` remains the sole canonical reference. Construct conversations are exploratory records, not canonical theory. New constructs developed in conversation are not official until written into the master context file.
+
+**When to save:** At the end of each construct session, or when the user requests. Write a summary covering: questions raised, key explanations given, principles established, and identified next steps.
+
+**Format:** Each file should include the session date, topics discussed (as headed sections), and a "Standing Principles Established" section for any locked claims that are candidates for the master context file.
