@@ -27,7 +27,8 @@ This file is the canonical reference for all TSR-1G constructs, variables, defin
 
 ```
 TSR-1G/
-├── CONTEXT/                    # Theory. Master context file lives here.
+├── CONTEXT/                    # Operationally active. Master context file lives here, read every session.
+├── CONSTRUCT/                  # Standing canonical theory, non-operational (see Section 12A)
 ├── CONSTRUCT DEVELOPMENT/      # Saved construct conversation logs (see Section 11)
 ├── MODELS/                     # Python simulation and analysis code
 ├── DATA/
@@ -206,3 +207,15 @@ CONSTRUCT DEVELOPMENT/Construct Conversation YYYY-MM-DD.md
 **When to save:** At the end of each construct session, or when the user requests. Write a summary covering: questions raised, key explanations given, principles established, and identified next steps.
 
 **Format:** Each file should include the session date, topics discussed (as headed sections), and a "Standing Principles Established" section for any locked claims that are candidates for the master context file.
+
+---
+
+## 12A. CONSTRUCT vs CONTEXT
+
+TSR-1G maintains two parallel, synced copies of the theory's substantive content, each serving a different purpose:
+
+**`CONTEXT/TSR-1G_Master_Context_File.md`** is the operationally active file. It is what every session reads first (Section 2), and it is what other projects (notably TSR-2G) cite by Part/Section number. Its numbering is stable and must never be renumbered or restructured, since external references depend on it. It includes both the theory itself and the operational layers built around it: Section 3 (Constraints and Style Rules) and Part XII (Execution Layer — Turning the Crank).
+
+**`CONSTRUCT/TSR-1G_Master_Construct_File.md`** is the standing canonical statement of the theory itself, deliberately kept non-operational. It carries the same Part/Section numbers as CONTEXT for everything it shares, so the two stay directly comparable, but it omits Section 3 and Part XII because those are about running a Claude Code session against the theory, not about the theory itself. It exists so the theory can be read, cited, and eventually published independent of any AI-session scaffolding.
+
+**Sync discipline:** the two files must always be kept in sync for the content they share. Any amendment to a locked TSR-1G construct (including amendments proposed from TSR-2G under its own CLAUDE.md Section 4 protocol) must be applied to both files in the same pass. Do not edit one without the other. If a change is operational only (output conventions, file-naming, workflow steps), it touches CONTEXT alone and CONSTRUCT is unaffected.
