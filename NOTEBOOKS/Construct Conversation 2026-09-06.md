@@ -133,22 +133,61 @@ Together these cover the full inforay mechanics from Sol emission to systemic ef
 
 ---
 
-## 4. Open Questions for Next Session
+## 4. Sub-Blob Emission Properties (Session Continuation)
 
-1. **Mode architecture cleanup:** Should Constructive Absorption, Rejection, and Distortive Absorption be formally collapsed into a continuous two-axis (coupling strength × T'/T" balance) interaction space, with only Amplification and Scattering retained as named threshold conditions? This would require an amendment to Section 8A.5 in both CONTEXT and CONSTRUCT.
+Sub-blobs are not passive receivers. They are active emitters. Every absorbed inforay produces subsequent emission whose character is determined by the sub-blob's state. This makes the TSR information architecture a proper **bidirectional radiative transfer system**.
 
-2. **Radiative transfer formalization:** The sub-blob → sub-blob propagation model (radiative transfer through a scattering medium) is described qualitatively in Section 8A.7 but not formally grounded in this physics model. Worth formalizing the connection explicitly?
+**Spontaneous Emission.** A sub-blob with stored Omega above a background threshold emits inforays without being triggered by an incoming signal. Rate scales with stored Omega. Spontaneous emissions are incoherent -- different sub-blobs emit independently, without shared narrative direction. They do not synchronize. This is the background radiation of a stressed system: local protests, grievance narratives, whisper networks, dissent. Rising spontaneous emission rate is a precursor indicator of rising stored Omega and increasing susceptibility to Cascade Release. Gafsa 2008 was spontaneous emission from a high-Omega cluster that never reached Cascade Release conditions.
 
-3. **Bimodal regime diagnostic:** The convergent signature across variables described in Section 1 of this notebook is not yet in the canonical. Should it be formalized as a named phase condition (like the Critical Regime in phase space) within the existing architecture?
+**Stimulated Emission (Cascade Release).** The only mode that produces coherent re-emission. The emitted signal shares the stimulating inforay's narrative direction. When this cascades through a chain of high-Omega sub-blobs, each triggering the next, the result is amplified and coherent across the Mass -- narrative synchronization. This is the laser mechanism: stored Omega = population inversion, inforay = stimulating photon, Cascade Release = amplified coherent output.
 
-4. **Content vector as spectral decomposition:** The multi-line spectroscopy analog for the content vector (v1, v2, v3) is not explicitly stated in the canonical. Worth adding to the Inforay Mechanics section as the physics grounding for why multi-axis inforays are disproportionately effective?
+**Content Vector Transformation (Fluorescence).** A sub-blob absorbs an inforay with one content vector and re-emits with a different one. Local Psi conditions transform the signal in transit. Most significant case: x1-loaded (economic) inforay absorbed and re-emitted as x2/x3-loaded (political-identity) inforay. This is the mechanism by which economic grievance becomes political mobilization -- not a separate process but content vector transformation at each absorption-emission cycle.
+
+**Delayed Re-Emission (Phosphorescence).** A sub-blob absorbs an inforay but sigma_valve is closed (repression, closed civil space). Energy is stored. When the valve later opens, stored narrative energy releases -- sometimes long after the original absorption. Mechanism for latent narrative activation and historical trauma re-expression.
+
+**The Bidirectional System.** Sub-blob emissions reach other sub-blobs (horizontal propagation through Mass volume) and also return to the Sol. The Sol is therefore also an absorber:
+
+- Inner orbit sub-blob emissions → Sol at small α → high T' → Coherent Absorption by Sol → feedback registered, dissipation functions
+- Outer orbit sub-blob emissions → Sol at large α → high T" → Thermal Absorption or Deflection by Sol → feedback inverted to threat signal or ignored, dissipation channel closed, repression response loaded back into outer orbit
+
+A Sol in Singularity-capture condition increasingly Thermal-absorbs or Deflects outer orbit emissions regardless of content. The outer orbit emits, the Sol receives but does not coherently absorb. This is the thermodynamic signature of dissipation channel failure.
 
 ---
 
-## 5. Session Notes
+## 5. Mode Renaming (Resolved in Session)
+
+The numbered mode taxonomy (Mode 1-5) was retired. Modes are now named. A sixth mode (Spontaneous Release) was added to capture sub-blob-originating emissions not covered by the original five.
+
+| Old name | New name | Energy routing |
+|---|---|---|
+| Mode 1: Constructive Absorption | **Coherent Absorption** | Into Phi (binding), ordered |
+| Mode 2: Rejection and Reflection | **Deflection** | None -- no coupling |
+| Mode 3: Distortive Absorption | **Thermal Absorption** | Into Omega (stress), incoherent |
+| Mode 4: Amplification | **Cascade Release** | Stored Omega released, G_stored > 1, coherent |
+| Mode 5: Scattering | **Polarizing Scatter** | Split: Phi one side, Omega other, Psi_div increases |
+| (new) | **Spontaneous Release** | Omega radiated outward without trigger |
+
+These names and descriptions were added to Section 8A.5 of both CONTEXT and CONSTRUCT in this session.
+
+---
+
+## 6. Open Questions for Next Session
+
+1. **Radiative transfer formalization:** The sub-blob → sub-blob propagation model (radiative transfer through a scattering medium) is described qualitatively in Section 8A.7 but not formally grounded in this physics model. Worth formalizing the connection explicitly?
+
+2. **Bimodal regime diagnostic:** The convergent signature across variables (Section 1 of this notebook) is not yet in the canonical. Should it be formalized as a named phase condition within the existing architecture?
+
+3. **Content vector as spectral decomposition:** The multi-line spectroscopy analog for the content vector (v1, v2, v3) -- grounding why multi-axis inforays are disproportionately effective -- is not yet explicit in the canonical. Worth adding to Section 8A?
+
+4. **Fluorescence and Phosphorescence formalization:** The content vector transformation and delayed re-emission behaviors are described in Section 8A.5A but lack formal candidate relations. Should they have candidate equations analogous to those in 8A.10?
+
+---
+
+## 7. Session Notes
 
 - Session type: TSR-1G-Construct (theory only).
-- Manifold Partition closed as a candidate construct -- resolved as a bimodal sub-blob realignment regime condition within existing architecture. No new construct.
-- Inforay interaction modes: five-mode taxonomy identified as architecturally inelegant. Amplification and Scattering are load-bearing and qualitatively discontinuous. The other three are regions of a continuous interaction space. Cleanup flagged but not formalized.
-- Physics grounding of routing: three converging frameworks (QM Bloch sphere, GR stress-energy tensor, thermodynamic free energy partition). Best fit for the specific Sol → sub-blob setup: quantized atomic absorption by a multi-level system + radiative transfer for propagation.
-- The laser mechanism (stimulated emission) is the precise physics analog for Mode 4 Amplification.
+- Manifold Partition closed as a candidate construct -- resolved as bimodal sub-blob realignment regime condition within existing architecture. No new construct.
+- Sub-blob emission properties developed: Spontaneous Emission, Stimulated Emission (Cascade Release), Content Vector Transformation (Fluorescence), Delayed Re-Emission (Phosphorescence), and the bidirectional radiative system.
+- Mode taxonomy retired and replaced with named modes. Spontaneous Release added as sixth mode.
+- Both CONTEXT and CONSTRUCT updated with new Section 8A.5 (named modes) and new Section 8A.5A (sub-blob emission properties).
+- Physics grounding confirmed: quantized atomic absorption (Sol → sub-blob) + radiative transfer (sub-blob → sub-blob propagation).

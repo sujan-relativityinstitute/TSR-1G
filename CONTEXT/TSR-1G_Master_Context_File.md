@@ -624,17 +624,17 @@ Where M_interaction modifies the energy deposited by the inforay at that surface
 
 ### 8A.5 Surface Interaction Modes
 
-When an inforay strikes the Mass surface, five primary interaction modes are possible. The mode that occurs depends on the local coupling coefficients, T'T" conditions, narrative charge, and stored field energy at the point of contact.
+When an inforay strikes the Mass surface, six primary interaction modes are possible. The mode that occurs depends on the local coupling coefficients, T'T" conditions, narrative charge, and stored field energy at the point of contact.
 
-**Mode 1: Constructive Absorption**
+**Coherent Absorption**
 
-The inforay passes through the surface and deposits energy into the relevant field in a binding or stabilizing manner. Energy flows primarily into Phi (Cohesion field).
+The inforay passes through the surface and deposits energy into Phi (Cohesion field) in ordered, binding form. The sub-blob's subsequent re-emission carries the narrative direction of the absorbed signal, reinforcing it downstream.
 
 Conditions: T' toward origin is high. Narrative charge is consonant with local Ψ. Content vector aligns with local axis sensitivities. No major stored Omega at the contact region.
 
 Example: A trusted government announcement of successful crisis management, received by a population segment that believes in institutional competence.
 
-**Mode 2: Rejection and Reflection**
+**Deflection**
 
 The inforay does not penetrate the surface. The population at the contact point does not register the information as credible, relevant, or meaningful. Energy is neither deposited nor transformed.
 
@@ -642,33 +642,71 @@ Conditions: T' toward origin is low. T" is moderate (enough to dismiss but not e
 
 Example: Official economic statistics released by a regime with no remaining credibility, ignored by populations that have ceased to engage with official channels.
 
-**Mode 3: Distortive Absorption**
+**Thermal Absorption**
 
-The inforay is absorbed, but its meaning is transformed in transit through the surface. Energy is deposited primarily into Omega (Tension field) regardless of the sender's intent.
+The inforay is absorbed, but its energy is converted to stress form rather than binding form -- the social equivalent of a photon becoming heat rather than coherent excitation. Energy deposits primarily into Omega (Tension field) regardless of the sender's intent.
 
 Conditions: T" toward origin is high. Narrative charge is dissonant or ambiguous. The local Ψ field is under strain. The population segment reinterprets the information through a threat or grievance lens.
 
 Example: A government economic reassurance report received by a population under severe economic stress and low regime trust. The reassurance is absorbed as evidence that the regime is disconnected from reality or actively lying. Omega increases.
 
-**Mode 4: Amplification**
+**Cascade Release**
 
-The inforay triggers a release of stored field energy at the contact point far exceeding the energy carried by the inforay itself. This is the critical mechanism for understanding how small triggers can produce large systemic effects.
+The inforay triggers a release of stored field energy at the contact point far exceeding the energy carried by the inforay itself. This is the critical mechanism for understanding how small triggers can produce large systemic effects. The emitted signal is coherent with the stimulating inforay -- it shares the stimulating signal's narrative direction. Only Cascade Release produces coherent re-emission; this is why it is the only mode capable of driving system-wide narrative synchronization.
 
 Conditions: Large stored Omega exists at the contact region. T" toward the regime (or dominant narrative source) is high. The inforay's narrative charge is consonant with accumulated but previously dispersed grievances. The content vector achieves high multi-axis coupling. A latent narrative frame exists that the inforay crystallizes into active form.
 
-The inforay does not merely deposit energy. It catalyzes the conversion of stored potential energy (latent Omega) into kinetic form (active mobilization, narrative synchronization, institutional stress).
+The inforay does not merely deposit energy. It catalyzes the conversion of stored potential energy (latent Omega) into kinetic form (active mobilization, narrative synchronization, institutional stress). In physical terms this is stimulated emission: stored Omega is the population inversion, the inforay is the stimulating signal, and the released energy is the amplified coherent output. The laser mechanism applies directly.
 
 Example: The Bouazizi event in Tunisia. A relatively low-intensity local incident whose content vector loaded simultaneously across economic (x1: market vendor denied livelihood), political (x2: arbitrary state humiliation), and social (x3: generational dignity, regional identity) axes. It struck a surface region with enormous stored Omega, high T" toward the regime, and consonant narrative charge with the lived experience of millions. The energy released far exceeded the energy carried by the initial signal.
 
-**Mode 5: Scattering**
+**Polarizing Scatter**
 
-The inforay breaks apart on contact with a complex, fragmented, or polarized surface. Different fragments propagate in different directions through the Mass volume with altered charges and intensities.
+The inforay breaks apart on contact with a complex, fragmented, or polarized surface. Different fragments propagate in different directions through the Mass volume with altered charges and intensities. The result is bifurcated energy deposition: Coherent Absorption on one side of the surface boundary, Thermal Absorption on the other. Psi_div increases at the contact region.
 
-Conditions: High local polarization gradient at the contact surface. The population at the contact region contains sub-groups with incompatible Ψ alignment, divergent T'T" profiles, or opposing identity positions on x3.
+Conditions: High local polarization gradient at the contact surface. The population at the contact region contains sub-blobs with incompatible Ψ alignment, divergent T'T" profiles, or opposing identity positions on x3.
 
-The same inforay produces simultaneous constructive absorption in one sub-population and distortive absorption in an adjacent one. Scattering amplifies Psi_div (narrative divergence) at the contact region.
+Example: A politically charged court ruling in a deeply polarized society. One faction absorbs it as vindication (Coherent Absorption for that group). The opposing faction absorbs it as persecution (Thermal Absorption for that group). The inforay is scattered into opposing energy deposits that widen the polarization gap. In the bimodal sub-blob regime, the cleft between the two mode clusters functions as a permanent Polarizing Scatter surface -- every inforay that reaches it deepens the division regardless of content.
 
-Example: A politically charged court ruling in a deeply polarized society. One faction absorbs it as vindication (constructive, into Phi for that group). The opposing faction absorbs it as persecution (distortive, into Omega for that group). The inforay is scattered into opposing energy deposits that widen the polarization gap.
+**Spontaneous Release**
+
+A sub-blob with stored Omega above a background threshold emits inforays without being triggered by an incoming signal. Driven purely by accumulated stress energy. Spontaneous Release is incoherent -- emissions from different sub-blobs are not synchronized and do not share a common narrative direction -- which distinguishes it fundamentally from Cascade Release.
+
+Conditions: Stored Omega at the contact region exceeds a background threshold. No specific triggering inforay required. Emission rate scales with stored Omega: higher stored stress produces more frequent spontaneous emission.
+
+Spontaneous Release is the background radiation of a stressed system: local protests, grievance narratives, whisper networks, informal organizing, and dissent that persist continuously in high-Omega regions. Because emissions are incoherent, Spontaneous Release does not by itself produce phase transitions. Its significance is diagnostic: rising Spontaneous Release rate is a precursor indicator of rising stored Omega and increasing susceptibility to Cascade Release if a sufficiently symbolically critical inforay arrives.
+
+Example: The 2008 Gafsa mining basin protests in Tunisia. High spontaneous emission from a local high-Omega cluster. The emissions did not trigger Cascade Release because symbolic criticality was insufficient and internal Connection between the interior and the coastal surface was inadequate for propagation. The event remained local.
+
+### 8A.5A Sub-Blob Emission Properties
+
+Sub-blobs are not passive receivers of inforays. They are active emitters. Every absorbed inforay produces subsequent emission whose character is determined by the sub-blob's state at the time of absorption. This makes the TSR information architecture a proper bidirectional radiative transfer system rather than a one-directional Sol-to-Mass transmission model.
+
+**Spontaneous Emission**
+
+A sub-blob with stored Omega above a threshold emits inforays without being triggered by an incoming signal. The emission rate scales with stored Omega: the more stressed the sub-blob, the more it emits. Spontaneous emissions are incoherent -- different sub-blobs emit independently, in different directions, with different narrative charges. They do not synchronize across the Mass. This is the background radiation of a stressed system: local protests, grievance narratives, whisper networks, informal organizing, and dissent. Rising spontaneous emission rate is a precursor indicator of rising stored Omega before any triggering event arrives.
+
+**Stimulated Emission**
+
+When an incoming inforay strikes a high-Omega sub-blob under Cascade Release conditions (G_stored > 1), the emitted signal is coherent with the stimulating inforay -- it shares the stimulating signal's narrative direction. This is what distinguishes Cascade Release from all other interaction modes: only stimulated emission produces coherent re-emission. Coherent re-emission from a chain of high-Omega sub-blobs is the physical mechanism of narrative synchronization. The cascade propagates coherence rather than merely spreading energy.
+
+**Content Vector Transformation**
+
+A sub-blob absorbs an inforay with one content vector and re-emits with a different one. The sub-blob's local Psi field and T'(α) conditions transform the signal in transit. The most significant case: a sub-blob absorbs an x1-loaded (economic) inforay and re-emits as an x2/x3-loaded (political-identity) inforay. This is the mechanism by which economic grievance becomes political mobilization -- not through any separate process but through the content vector transformation that occurs at each absorption-emission cycle. The transformation direction is determined by the sub-blob's dominant axis sensitivity and its local coupling coefficient profile.
+
+**Delayed Re-Emission**
+
+A sub-blob absorbs an inforay but cannot immediately re-emit due to sigma_valve closure: high repression, closed civil space, suppressed expression channels. The absorbed energy is stored. When the valve later opens -- repression eases, civil space reopens, a triggering event occurs -- the stored narrative energy releases, sometimes long after the original absorption event. This is the mechanism for latent narrative activation and historical trauma re-expression. A subpopulation can carry absorbed narrative charge for years or decades before re-emitting it when conditions permit.
+
+**The Bidirectional Radiative System**
+
+Sub-blob emissions propagate not only to other sub-blobs (horizontal propagation through the Mass volume) but also back toward the Sol. The Sol is therefore also an absorber of inforays originating from within the Mass. How the Sol routes incoming sub-blob emissions determines whether dissipation channels function:
+
+Sol reception of inner orbit sub-blob emissions: small α, high T' → Coherent Absorption. The Sol registers the feedback and routes it to Phi (governance response, legitimacy reinforcement, policy adjustment). This is functional dissipation.
+
+Sol reception of outer orbit sub-blob emissions: large α, high T" → Thermal Absorption or Deflection. The Sol receives the signal but routes it to Omega (threat assessment, repression trigger) or deflects it entirely. The outer orbit's emission registers as threat rather than as information to act on. This closes the dissipation channel while generating a repression response inforay that loads additional Omega back into the outer orbit.
+
+A Sol in the Singularity-capture condition increasingly Thermal-absorbs or Deflects outer orbit emissions regardless of their content, because the angular geometry (large α between Sol and outer orbit sub-blobs) ensures high T" routing. The outer orbit emits, the Sol receives but does not coherently absorb. This is the thermodynamic signature of dissipation channel failure: energy emitted by the sub-blob enters the Sol and is re-emitted as Omega back into the system rather than being retained as Phi.
 
 ### 8A.6 Polarization and Surface Geometry
 
@@ -678,7 +716,7 @@ A non-polarized mass has a relatively smooth, continuous surface in (x1, x2, x3)
 
 A polarized mass develops ridges, bifurcations, clefts, and thin necks in its surface geometry:
 
-**Ridges** form where two opposed sub-populations meet along an axis. At a ridge, the coupling coefficients and T'T" conditions change sharply over a small distance in social space. Any inforay of sufficient intensity that strikes a ridge is almost certain to scatter (Mode 5), producing opposing energy deposits on either side.
+**Ridges** form where two opposed sub-populations meet along an axis. At a ridge, the coupling coefficients and T'T" conditions change sharply over a small distance in social space. Any inforay of sufficient intensity that strikes a ridge is almost certain to undergo Polarizing Scatter, producing opposing energy deposits on either side.
 
 **Clefts** form where sub-populations have separated enough that the Mass volume develops gaps or near-gaps. Inforays that enter a cleft may propagate along it (amplifying the division) rather than passing through to the other side.
 
@@ -702,7 +740,7 @@ Internal propagation is governed by:
 
 **Spatial diffusion pattern:** Information propagates outward from the initial absorption point, but not uniformly. It follows the internal Connection topology, which may route signals along class lines, ethnic networks, regional linkages, or institutional hierarchies rather than through simple geographic adjacency.
 
-**Critical Insight:** The difference between a localized incident and a system-wide phase transition often depends on internal propagation conditions. An inforay that triggers Mode 4 (amplification) at a single surface point will produce system-wide effects only if the released energy can propagate through the Mass volume to reach and activate other regions with stored Omega. If internal Connection is fragmented, propagation fails and the event remains local. If internal Connection is sufficient, the released energy cascades outward, encountering new regions of stored Omega and potentially triggering secondary amplification events.
+**Critical Insight:** The difference between a localized incident and a system-wide phase transition often depends on internal propagation conditions. An inforay that triggers Cascade Release at a single surface point will produce system-wide effects only if the released energy can propagate through the Mass volume to reach and activate other regions with stored Omega. If internal Connection is fragmented, propagation fails and the event remains local. If internal Connection is sufficient, the released energy cascades outward, encountering new regions of stored Omega and potentially triggering secondary Cascade Release events.
 
 This is the mechanism behind narrative synchronization. It is not instantaneous or automatic. It depends on the internal topology of the Mass, the distribution of stored Omega, and the capacity of available channels to carry the signal across the volume.
 
@@ -716,7 +754,7 @@ They carry high nominal intensity due to institutional amplification.
 
 Their effective interaction depends on T' toward the Sol at each surface point. Inner orbit populations (Section 22.3) typically have higher T' toward Sol-originated inforays. Outer orbit populations may have low T' or high T", causing the same Sol emission to be constructively absorbed near the center and distortively absorbed at the periphery.
 
-When the Political Sol emits inforays under crisis conditions and its Legitimacy reserve (L) has declined, the T' multiplier weakens across the surface. Concession inforays may be distortively absorbed as signals of weakness rather than constructively absorbed as signals of responsiveness. Repression inforays may trigger Mode 4 amplification rather than Mode 2 rejection of dissent.
+When the Political Sol emits inforays under crisis conditions and its Legitimacy reserve (L) has declined, the T' multiplier weakens across the surface. Concession inforays may be Thermal-absorbed as signals of weakness rather than Coherently Absorbed as signals of responsiveness. Repression inforays may trigger Cascade Release rather than Deflection of dissent.
 
 ### 8A.9 Symbolic Criticality
 
@@ -744,7 +782,7 @@ Where:
 I = inforay intensity
 alpha_total(p) = composite coupling coefficient at point p
 M_interaction(p) = T'T" multiplier at point p for the given origin
-G_stored(p) = stored field energy amplification factor (equals 1 for normal absorption, greater than 1 when Mode 4 amplification conditions are met)
+G_stored(p) = stored field energy amplification factor (equals 1 for normal absorption, greater than 1 when Cascade Release conditions are met)
 
 **Energy deposition partitioning:**
 
@@ -1196,7 +1234,7 @@ The entropy mechanics framework produces the following emergent properties that 
 
 **The Cascade:** Entropic drift does not express itself uniformly across domains. It moves through the system in a specific sequence, each stage creating the conditions for the next. Concentration raises Social Temperature. Rising temperature deforms behavioral incentives (not because agents become morally worse, but because the gradient changes what rationality looks like). Deformed behavior fragments informational coherence (because a high-temperature population cannot afford the energetic cost of verification, nuance, and deliberation). Fragmented information erodes the legitimacy that economic coordination requires. Eroded legitimacy makes further concentration easier, closing the loop. This is not three separate problems (economic, behavioral, informational) but one process expressing itself sequentially. The cascade, once underway, is far easier to accelerate than to reverse because each stage amplifies the conditions for the next.
 
-**Theta-Psi coupling (information processing under thermal stress):** Social Temperature directly modifies how the Mass processes information. Populations at low Theta can afford verification, deliberation, and nuanced interpretation. These are energetically expensive cognitive operations that require stable planning horizons and surplus capacity. Populations at high Theta cannot sustain these operations. Shorthand, suspicion, and tribal signaling replace deliberation because they are faster and cheaper, the currencies a precarious population can still afford. This coupling has direct consequences for Inforay Mechanics (Section 8A): populations at high Theta are structurally more susceptible to Mode 3 (distortive absorption) and Mode 5 (scattering) interactions, not because the information changed but because the population's processing capacity degraded. The same inforay that would be constructively absorbed by a low-Theta population may be distortively absorbed or scattered by a high-Theta population. This means that rising Social Temperature does not merely increase entropy directly through behavioral expansion. It also degrades the Psi field indirectly by reducing the population's capacity to maintain narrative coherence, creating a secondary entropy-producing pathway that compounds the primary one.
+**Theta-Psi coupling (information processing under thermal stress):** Social Temperature directly modifies how the Mass processes information. Populations at low Theta can afford verification, deliberation, and nuanced interpretation. These are energetically expensive cognitive operations that require stable planning horizons and surplus capacity. Populations at high Theta cannot sustain these operations. Shorthand, suspicion, and tribal signaling replace deliberation because they are faster and cheaper, the currencies a precarious population can still afford. This coupling has direct consequences for Inforay Mechanics (Section 8A): populations at high Theta are structurally more susceptible to Thermal Absorption and Polarizing Scatter, not because the information changed but because the population's processing capacity degraded. The same inforay that would be Coherently Absorbed by a low-Theta population may be Thermally Absorbed or undergo Polarizing Scatter in a high-Theta population. This means that rising Social Temperature does not merely increase entropy directly through behavioral expansion. It also degrades the Psi field indirectly by reducing the population's capacity to maintain narrative coherence, creating a secondary entropy-producing pathway that compounds the primary one.
 
 ### 16A.12 Candidate Formal Relations
 
@@ -1423,7 +1461,7 @@ T'T" conditions vary systematically with r_orbital. Inner orbit actors typically
 
 Local Social Temperature (Theta) typically increases with r_orbital. The Sol's maintenance energy channeling preferentially cools inner orbits and undercools outer orbits, producing the temperature gradient (Section 16A.5) that drives entropy production.
 
-Stored Omega (potential stress energy) typically accumulates at high r_orbital where dissipation channels are weakest and Theta is highest. This creates the characteristic hazard pattern: stress stores where it is least accessible to institutional management and most available for Mode 4 amplification (Section 8A.5).
+Stored Omega (potential stress energy) typically accumulates at high r_orbital where dissipation channels are weakest and Theta is highest. This creates the characteristic hazard pattern: stress stores where it is least accessible to institutional management and most available for Cascade Release (Section 8A.5).
 
 **Omega as a Distributed Field:**
 
@@ -1560,6 +1598,14 @@ TSR does not claim that society is literally astrophysics. It claims that the be
 | T'T" Multiplier | Refractive and amplification index governing energy deposition mode |
 | Symbolic Criticality | Resonance condition enabling disproportionate energy release from low-intensity input |
 | Polarization Ridges | Diffractive surface geometry producing scattered and opposing absorption |
+| Coherent Absorption | Resonant photon absorption into bound state; energy stored as coherent excitation (Phi) |
+| Deflection | Off-resonance: photon frequency mismatched to transition, medium transparent |
+| Thermal Absorption | Incoherent absorption: photon energy dissipated as phonons/heat (Omega) |
+| Cascade Release | Stimulated emission: inverted-population atom triggered by photon, releases stored energy coherently and amplified (laser mechanism) |
+| Polarizing Scatter | Diffraction at heterogeneous medium boundary; opposing absorption on either side |
+| Spontaneous Release | Spontaneous emission: excited atom emits without trigger, incoherent, rate proportional to stored energy |
+| Sub-blob emission properties | Atomic emission behaviors: spontaneous emission, stimulated emission, fluorescence (content vector transformation), phosphorescence (delayed re-emission) |
+| Bidirectional radiative system | Radiative transfer: medium both absorbs and re-emits; Sol also receives and routes sub-blob emissions |
 | Social Temperature (Theta) | Kinetic energy of population constituents, state of thermal agitation |
 | Maintenance Energy (E_m) | Work required to sustain a low-entropy configuration against thermal drift |
 | Configuration Space | Phase space of possible system arrangements, expanding with population and complexity |
@@ -1668,7 +1714,7 @@ dΩ/dt = +δ·structural_contradiction + ε·inequality - ζ·dissipation
 **Inforay Energy Deposition:**
 E_dep(p) = I · alpha_total(p) · M_interaction(p) · G_stored(p)
 
-Where I is inforay intensity, alpha_total is composite coupling coefficient at surface point p, M_interaction is the T'T" multiplier, and G_stored is the stored field energy amplification factor (equals 1 for normal absorption, greater than 1 under Mode 4 amplification conditions).
+Where I is inforay intensity, alpha_total is composite coupling coefficient at surface point p, M_interaction is the T'T" multiplier, and G_stored is the stored field energy amplification factor (equals 1 for normal absorption, greater than 1 under Cascade Release conditions).
 
 **Symbolic Criticality Index:**
 SC ≈ f(multi-axis loading, narrative consonance with latent grievance, population resonance fraction, stored Ω magnitude, Connection sufficiency)
@@ -1854,8 +1900,9 @@ At every time step, classify the system as: Stable Basin, Metastable Zone, Pre-C
 - Rising variance in Ψ (narrative fragmentation)
 - Increasing mismatch between Configuration and Manifold
 - Compression in Δτ (events clustering)
-- Shift in dominant inforay interaction mode from constructive absorption toward distortive absorption or scattering across expanding surface regions
-- Collapse of T' multiplier toward Political Sol emissions (regime signals increasingly rejected or distortively absorbed)
+- Shift in dominant inforay interaction mode from Coherent Absorption toward Thermal Absorption or Polarizing Scatter across expanding surface regions
+- Collapse of T' multiplier toward Political Sol emissions (regime signals increasingly Deflected or Thermally Absorbed)
+- Rising Spontaneous Release rate across outer orbit sub-blobs as precursor indicator of stored Omega accumulation before any triggering event arrives
 - Rising symbolic criticality of routine grievance events (events that previously remained local begin achieving multi-axis coupling)
 - Polarization ridge formation visible in differential response to identical information across population segments
 - Rising Social Temperature (Θ) across majority population segments while elite Θ remains stable or declines (temperature gradient widening)
@@ -1945,7 +1992,7 @@ The event log captures individual dated events that perturb the manifold. These 
 
 This distinction matters because the structural panel alone cannot explain why two structurally identical systems diverge after a single event. The event log provides the perturbation geometry. The structural panel provides the manifold curvature within which the perturbation propagates. Together, and only together, they produce the full trajectory.
 
-The Bouazizi self-immolation of December 17, 2010 is not a structural panel observation. It is a Type 2 input: a single dateable event with specific content vector loading (x1 — economic desperation; x2 — arbitrary state power; x3 — dignity and generational humiliation), high narrative charge q_n, multi-axis coupling across the Mass surface, and Mode 4 amplification interaction with accumulated stored Omega. It is not captured by annual protest counts or annual Gini coefficients. It belongs in the event log, coded as a TSR inforay, and must be incorporated as a Type 2 input if the model is to reproduce the trajectory.
+The Bouazizi self-immolation of December 17, 2010 is not a structural panel observation. It is a Type 2 input: a single dateable event with specific content vector loading (x1 — economic desperation; x2 — arbitrary state power; x3 — dignity and generational humiliation), high narrative charge q_n, multi-axis coupling across the Mass surface, and Cascade Release interaction with accumulated stored Omega. It is not captured by annual protest counts or annual Gini coefficients. It belongs in the event log, coded as a TSR inforay, and must be incorporated as a Type 2 input if the model is to reproduce the trajectory.
 
 This applies equally to non-trigger events. The 2008 Gafsa mining basin protests are a Type 2 input with lower symbolic criticality and limited propagation reach due to the surface conditions at that time. Their absence from the collapse trajectory is as theoretically significant as Bouazizi's presence. Both must be in the event log. The model's job is to explain both outcomes from the same equations.
 
@@ -2024,7 +2071,7 @@ Every Type 2 input event must be recorded with the following minimum properties:
 - Content vector: relative loading across x1 (economic), x2 (ideological), x3 (cultural/identity) axes, normalized so the three components sum to 1.0
 - Intensity: magnitude of the initial emission (0 to 1 scale, estimated from event scale, media reach, and participant count)
 - Narrative charge q_n: alignment or misalignment of event content with latent population grievance vector (positive = consonant, negative = dissonant)
-- Interaction mode: one of the five canonical inforay modes (constructive absorption, rejection, distortive absorption, amplification, scattering)
+- Interaction mode: one of the six canonical inforay modes (Coherent Absorption, Deflection, Thermal Absorption, Cascade Release, Polarizing Scatter, Spontaneous Release)
 - Symbolic criticality: estimated 0 to 1 score reflecting how many axes are simultaneously loaded and how tightly the content couples to latent Mass surface conditions
 - Propagation reach: local / regional / national / international
 - Regime response: nature, timing relative to event, and estimated effect on T'(α) of the response inforay
@@ -2167,13 +2214,13 @@ The 2008 Gafsa mining basin protests generated inforays that struck the Mass sur
 
 By 2010, surface conditions had shifted. More of the population occupied precarious x1 positions following the 2008 global financial effects. T" toward the regime had increased across broader surface regions. New information channels (Al Jazeera, Facebook, mobile phones) had opened surface regions previously shielded from peripheral inforays.
 
-The self-immolation of Mohamed Bouazizi achieved high symbolic criticality. Its content vector loaded simultaneously across x1 (economic desperation), x2 (arbitrary state power), and x3 (dignity, humiliation, generational identity), producing high coupling coefficients across a large fraction of the Mass surface. The event triggered Mode 4 amplification: stored Omega at the contact region was released with energy far exceeding the initial signal. Internal Connection channels, now augmented by digital networks, carried the released energy across the Mass volume, encountering additional regions of stored Omega and triggering secondary amplification cascades.
+The self-immolation of Mohamed Bouazizi achieved high symbolic criticality. Its content vector loaded simultaneously across x1 (economic desperation), x2 (arbitrary state power), and x3 (dignity, humiliation, generational identity), producing high coupling coefficients across a large fraction of the Mass surface. The event triggered Cascade Release: stored Omega at the contact region was released with energy far exceeding the initial signal. Internal Connection channels, now augmented by digital networks, carried the released energy across the Mass volume, encountering additional regions of stored Omega and triggering secondary Cascade Release events.
 
 Regime response inforays (concessions, then repression) arrived after T' toward the Sol had collapsed across most surface regions. These signals were distortively absorbed: concessions read as desperation, repression read as confirmation of the grievance narrative. The military's refusal to fire was an inforay of extraordinary intensity originating from within the Configuration, received with high T' by a population that distinguished the military from the police. This signal achieved constructive absorption for the opposition narrative and triggered final legitimacy collapse.
 
 Δτ compressed. What had built for years unfolded in weeks. The Political Sol lost legitimacy faster than it could reassert control.
 
-**TSR Classification:** Metastable to Political Singularity via Mode 4 inforay amplification and narrative synchronization cascade. The Gafsa 2008 non-event and the Bouazizi 2010 trigger illustrate how identical structural conditions can produce different outcomes when surface geometry, coupling coefficients, and propagation topology differ.
+**TSR Classification:** Metastable to Political Singularity via Cascade Release inforay amplification and narrative synchronization cascade. The Gafsa 2008 non-event and the Bouazizi 2010 trigger illustrate how identical structural conditions can produce different outcomes when surface geometry, coupling coefficients, and propagation topology differ.
 
 **Quarterly computational finding (sorties 1d-1e):** The validated quarterly panel (2008-Q1 through 2011-Q1) confirms that Tunisia entered Pre-Critical phase in 2010-Q1 and Critical phase in 2010-Q4, both detectable before the Bouazizi cascade. Omega_acc crossed the Pre-Critical gate (> 0.65) in 2010-Q1 and the Critical gate (> 0.90) in 2010-Q4. The 2010-Q4 trigger conditions (WikiLeaks Nov 28, Bouazizi Dec 17) found a system already in the Critical regime, not a system pushed into crisis by the events themselves. Sortie 1e applies the D.4 audit correction (repression removed from T_tension_q; routes only through sigma_valve and discharge). Effect on T_tension_q: 2010-Q4 from 0.625 to 0.673. Phase classification is unchanged. Full quarterly data table is in OUTPUTS/1e/1e Tunisia_Quarterly_Panel.csv.
 
@@ -2231,7 +2278,7 @@ Across all cases, a consistent pattern emerges.
 
 Systems accumulate Tension over time while maintaining apparent order. Narrative divergence grows beneath the surface. Accessible energy declines as dissipation channels weaken. The T'T" surface evolves: T' toward the Political Sol degrades while T" increases, shifting dominant inforay interaction modes from constructive absorption toward distortive absorption and scattering. Political Sol emissions that once stabilized the system begin to backfire as the surface conditions transform their reception.
 
-A trigger event does not create instability. It activates it. Effective triggers achieve high symbolic criticality: multi-axis content loading, consonant narrative charge with latent grievances, and high coupling coefficients across a large fraction of the Mass surface. The trigger produces Mode 4 amplification at the contact point, releasing stored Omega far exceeding the energy of the initial signal. If internal Connection topology is sufficient, the released energy propagates through the Mass volume, encountering additional regions of stored Omega and triggering secondary amplification cascades. This is the mechanism of narrative synchronization.
+A trigger event does not create instability. It activates it. Effective triggers achieve high symbolic criticality: multi-axis content loading, consonant narrative charge with latent grievances, and high coupling coefficients across a large fraction of the Mass surface. The trigger produces Cascade Release at the contact point, releasing stored Omega far exceeding the energy of the initial signal. If internal Connection topology is sufficient, the released energy propagates through the Mass volume, encountering additional regions of stored Omega and triggering secondary Cascade Release events. This is the mechanism of narrative synchronization.
 
 Nonlinear transition follows. Time compresses. Institutions fail to respond at the pace required. Regime response inforays arrive after T' collapse has rendered them ineffective or counterproductive.
 
